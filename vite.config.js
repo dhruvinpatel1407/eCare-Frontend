@@ -6,6 +6,16 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
-    mainFields: ['module', 'main', 'jsnext:main', 'jsnext'],
+    mainFields: ["module", "main", "jsnext:main", "jsnext"],
+  },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./src/utils/setupTestEnvironment.js", // Path to your test setup file
+    testFiles: [
+      "**/*.{test,spec}.js", // Default pattern to find test files
+      "**/*.test.jsx", // For React test files
+      "**/*.spec.jsx", // For React test files
+    ],
   },
 });
