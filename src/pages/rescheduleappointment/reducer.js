@@ -1,4 +1,14 @@
 // Client/src/store/reducer.js
+
+import {
+  GET_EXISTING_APPOINTMENT_DETAILS_FAILURE,
+  GET_EXISTING_APPOINTMENT_DETAILS_REQUEST,
+  GET_EXISTING_APPOINTMENT_DETAILS_SUCCESS,
+  RESCHEDULE_APPOINTMENT_FAILURE,
+  RESCHEDULE_APPOINTMENT_REQUEST,
+  RESCHEDULE_APPOINTMENT_SUCCESS, 
+} from "./action";
+
 const initialState = {
     existingAppointment: null,
     bookedTimeSlots: [],
@@ -9,38 +19,38 @@ const initialState = {
   
   const rescheduleReducer = (state = initialState, action) => {
     switch (action.type) {
-      case 'GET_EXISTING_APPOINTMENT_DETAILS_REQUEST':
+      case GET_EXISTING_APPOINTMENT_DETAILS_REQUEST:
         return {
           ...initialState,
           loading: true,
           error: null
         };
-      case 'GET_EXISTING_APPOINTMENT_DETAILS_SUCCESS':
+      case GET_EXISTING_APPOINTMENT_DETAILS_SUCCESS:
         return {
           ...initialState,
           existingAppointment: action.payload,
           loading: false
         };
-      case 'GET_EXISTING_APPOINTMENT_DETAILS_FAILURE':
+      case GET_EXISTING_APPOINTMENT_DETAILS_FAILURE:
         return {
           ...initialState,
           error: action.payload,
           loading: false
         };
-      case 'RESCHEDULE_APPOINTMENT_REQUEST':
+      case RESCHEDULE_APPOINTMENT_REQUEST:
         return {
           ...state,
           loading: true,
           error: null
         };
-      case 'RESCHEDULE_APPOINTMENT_SUCCESS':
+      case RESCHEDULE_APPOINTMENT_SUCCESS:
         return {
           ...state,
           loading: false,
           success: true,
           error: null
         };
-      case 'RESCHEDULE_APPOINTMENT_FAILURE':
+      case RESCHEDULE_APPOINTMENT_FAILURE:
         return {
           ...state,
           loading: false,

@@ -21,7 +21,7 @@ const Dashboard = () => {
     }
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="pt-20 container mx-auto p-4">
             <h1 className="text-3xl font-bold mb-8 text-center">Our Doctors</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {doctors.map((doctor) => (
@@ -32,8 +32,8 @@ const Dashboard = () => {
                             name: doctor.name,
                             speciality: doctor.speciality,
                             hospital: doctor.hospital,
-                            rating: doctor.rating || 0,
-                            date: doctor.availableDays?.[0] || "Monday",
+                            rating: doctor.rating || 4,
+                            date: doctor.availableDays?.[0] || "Monday-Friday",
                             time: doctor.availableTime || "10:00 AM - 5:00 PM",
                             id : doctor._id,
                         }}

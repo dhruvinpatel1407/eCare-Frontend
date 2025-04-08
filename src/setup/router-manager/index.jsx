@@ -30,7 +30,7 @@ const ScrollToTop = () => {
 const Layout = ({ children }) => {
   const location = useLocation();
   // console.log(location);
-  const hideHeaderFooter = ["/login", "/signup"].includes(location.pathname);
+  const hideHeaderFooter = ["/login", "/signup", "/"].includes(location.pathname);
 
   return (
     <>
@@ -53,7 +53,7 @@ const RoutesManager = () => {
         <Layout>
           <ScrollToTop />
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/reschedule/:id" element={<RescheduleAppointment />} />
             <Route path="/login" element={<Login />} />

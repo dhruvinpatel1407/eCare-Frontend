@@ -37,9 +37,9 @@ export const signup = (formData, navigate) => async (dispatch) => {
       }
       dispatch(signupSuccess(data));
       showMessage("success", "Account Created Successfully!");
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
+      // setTimeout(() => {
+        navigate("/dashboard");
+      // }, 2000);
     })
     .catch((error) => {
       const errorMessage = error.message || "Signup failed. Please try again.";

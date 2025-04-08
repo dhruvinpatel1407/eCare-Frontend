@@ -2,20 +2,24 @@ import React from "react";
 
 const ServiceCard = ({ service }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 w-80">
-      <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-        {service.name}
-      </h2>
-      <p className="text-gray-600 dark:text-gray-300 mt-2">
-        {service.description}
-      </p>
-      <p className="text-lg font-semibold text-blue-600 dark:text-blue-400 mt-2">
-        ₹{service.price}
-      </p>
-      <span className="inline-block bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm px-3 py-1 rounded mt-3">
-        {service.category}
-      </span>
-    </div>
+    <div className="bg-white hover:shadow-2xl transition-shadow duration-300 rounded-2xl p-6 w-80 border border-gray-200 ">
+  <h2 className="text-2xl font-bold text-gray-800 mb-1">
+    {service.name}
+  </h2>
+  
+  <p className="text-gray-600 text-sm mb-3">
+    {service.description}
+  </p>
+  
+  <p className="text-lg font-semibold text-emerald-600">
+    ₹{service.price}
+  </p>
+  
+  <span className="inline-block bg-blue-100 text-blue-700 text-xs font-medium px-3 py-1 rounded-full mt-3">
+    {service.category}
+  </span>
+</div>
+
   );
 };
 

@@ -19,7 +19,8 @@ const initialState = {
             return {
               ...state,
               demographicDetails: action.payload,
-              isLoading: false
+              isLoading: false,
+              error: null,
         };
       case DEMOGRAPHIC_DETAILS_LOADING:
         return {
@@ -30,14 +31,17 @@ const initialState = {
       case ADD_DEMOGRAPHIC_DETAILS:
         return {
           ...state,
-          demographicDetails: action.payload,
-          isLoading: false
+          demographicDetails: { ...state.demographicDetails, ...action.payload },
+          isLoading: false,
+          error: null,
         };
       case UPDATE_DEMOGRAPHIC_DETAILS:
         return {
           ...state,
-          demographicDetails: action.payload,
-          isLoading: false
+          demographicDetails: { ...state.demographicDetails, ...action.payload },
+          isLoading: false,
+          error: null,
+
         };
       case DEMOGRAPHIC_DETAILS_ERROR:
         return {

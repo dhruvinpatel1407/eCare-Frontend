@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { getReports, uploadReport, downloadReport } from "./action";
-
-const LabReport = ({ getReports, uploadReport,downloadReport, reports, loading }) => {
+import { FaPlus } from "react-icons/fa";
+const LabReport = ({
+  getReports,
+  uploadReport,
+  downloadReport,
+  reports,
+  loading,
+}) => {
   const [showUploadForm, setShowUploadForm] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     getReports();
   }, [getReports]);
- 
-  const handleUpload = (e) => {
-    e.preventDefault();
+
+  const handleUpload = () => {
+    // e.preventDefault();
     if (selectedFile) {
       const formData = new FormData();
       formData.append("pdf", selectedFile);
@@ -22,81 +28,102 @@ const LabReport = ({ getReports, uploadReport,downloadReport, reports, loading }
     }
   };
 
-  const handleDownload = (e,filename) => {
+  const handleDownload = (e, filename) => {
     // console.log(filename);
     e.preventDefault();
     downloadReport(filename);
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">Lab Reports</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+          Lab Reports
+        </h1>
 
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
-          onClick={() => setShowUploadForm(true)}
-        >
-          Upload Report
-        </button>
-
+        {/* Upload Form */}
         {showUploadForm && (
-          <form onSubmit={handleUpload} className="mb-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="fixed inset-0 z-10 flex items-center justify-center bg-white bg-opacity-40 ">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleUpload(selectedFile);
+                setShowUploadForm(false);
+              }}
+              className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md mx-auto"
+            >
+              <h2 className="text-lg font-bold text-gray-800 mb-4 text-center">
+                Upload Lab Report
+              </h2>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+                <label className="block text-gray-700 text-sm font-medium mb-2">
                   Select File
                 </label>
                 <input
                   type="file"
                   onChange={(e) => setSelectedFile(e.target.files[0])}
                   accept=".pdf,.doc,.docx"
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-800 hover:file:bg-blue-200"
                 />
               </div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? "Uploading..." : "Upload"}
-              </button>
-            </div>
-          </form>
+              <div className="flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowUploadForm(false)}
+                  className="px-4 py-2 text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition disabled:opacity-50"
+                >
+                  {loading ? "Uploading..." : "Upload"}
+                </button>
+              </div>
+            </form>
+          </div>
         )}
 
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        {/* Reports Table */}
+        <div className="bg-white rounded-xl shadow-md overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+            <thead className="bg-gray-100">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Report Name
                 </th>
-                {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Uploaded By
-                </th> */}
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Uploaded Date
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {reports.map((report) => (
-                <tr key={report._id}>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                <tr key={report._id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                     {report.filename}
                   </td>
-                  {/* <td className="px-6 py-4 whitespace-nowrap">
-                    {report.uploadedBy}
-                  </td> */}
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     {new Date(report.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <button onClick={(e) => handleDownload(e,report.filename)}>
+                    <button
+                      onClick={(e) => handleDownload(e, report.filename)}
+                      className="text-blue-600 hover:underline text-sm"
+                    >
                       Download
                     </button>
                   </td>
@@ -105,6 +132,15 @@ const LabReport = ({ getReports, uploadReport,downloadReport, reports, loading }
             </tbody>
           </table>
         </div>
+
+        {/* Floating Upload Button */}
+        <button
+          onClick={() => setShowUploadForm(true)}
+          className="fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105"
+          aria-label="Upload Report"
+        >
+          <FaPlus className="text-lg" />
+        </button>
       </div>
     </div>
   );

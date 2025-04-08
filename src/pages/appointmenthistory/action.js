@@ -90,7 +90,8 @@ const fetchAppointments = () => async (dispatch) => {
     };
 };
 
-const appointmentRequest = () => ({ type: APPOINTMENT_REQUEST });
+const appointmentRequest = () => ({ 
+    type: APPOINTMENT_REQUEST});
 
 const appointmentSuccess = (appointments) => ({
     type: APPOINTMENT_SUCCESS,

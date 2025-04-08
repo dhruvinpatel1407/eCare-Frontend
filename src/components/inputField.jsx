@@ -11,24 +11,28 @@ const InputField = ({
   required = false
 }) => {
   return (
-    <div className="mb-4">
+    <div className="mb-6">
       {label && (
-        <label className="block text-gray-700 text-sm font-bold mb-2">
+        <label
+          htmlFor={name}
+          className="block text-gray-800 text-sm font-medium mb-1"
+        >
           {label}
-          {required && <span className="text-red-500">*</span>}
+          {required && <span className="text-red-500 ml-1">*</span>}
         </label>
       )}
       <input
+        id={name}
         type={type}
         name={name}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-          error ? 'border-red-500' : ''
+        className={`w-full px-4 py-2 text-sm rounded-lg border transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+          error ? "border-red-500" : "border-gray-300"
         }`}
       />
-      {error && <p className="text-red-500 text-xs italic">{error}</p>}
+      {error && <p className="text-red-500 text-xs mt-1 italic">{error}</p>}
     </div>
   );
 };

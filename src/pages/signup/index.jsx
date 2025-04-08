@@ -6,6 +6,7 @@ import { validateForm } from '../../utils/validations';
 import { showMessage } from '../../utils/ToastMessage/ShowMessage';
 import { signup } from './action';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -54,11 +55,25 @@ const Signup = () => {
     }, 2000);
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
-        <h2 className="text-center text-3xl font-extrabold text-gray-900">Sign Up</h2>
-        <form onSubmit={handleSubmit}>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-teal-100 via-white to-blue-100">
+      <div className="max-w-md w-full space-y-6 p-8 bg-white rounded-2xl shadow-xl border border-gray-200">
+        <div>
+          <h2 className="text-center text-4xl font-bold text-blue-800">Create Account</h2>
+          <p className="text-center text-gray-600 text-sm mt-1">
+            Sign up to book your doctor appointments easily
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
           <InputField
             label="Name"
             type="text"
@@ -96,17 +111,28 @@ const Signup = () => {
             value={formData.mobileNumber}
             onChange={handleChange}
             placeholder="Enter your mobile number (optional)"
+            required={false}
             error={errors.mobileNumber}
-            required
           />
+
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg"
+            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200"
             disabled={loading}
           >
             {loading ? 'Signing Up...' : 'Sign Up'}
           </button>
         </form>
+
+        <div className="text-center text-sm text-gray-600">
+          Already registered?{' '}
+          <Link
+            to="/login"
+            className="text-blue-600 hover:text-blue-800 font-medium transition duration-150"
+          >
+            Log in here
+          </Link>
+        </div>
       </div>
     </div>
   );

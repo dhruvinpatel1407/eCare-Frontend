@@ -9,6 +9,7 @@ import GoogleButton from 'react-google-button'
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import * as actions from "./action";
 import { auth, provider } from '../../config/firebase';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -75,11 +76,21 @@ const Login = () => {
    
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
-        <h2 className="text-center text-3xl font-extrabold text-gray-900">Login</h2>
-        <form onSubmit={handleSubmit}>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 via-white to-blue-100">
+      <div className="max-w-md w-full space-y-6 p-8 bg-white rounded-2xl shadow-2xl border border-gray-200">
+        <h2 className="text-center text-4xl font-bold text-blue-800">Welcome Back</h2>
+        <p className="text-center text-gray-500 text-sm">Log in to book your appointment</p>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
           <InputField
             label="Email"
             type="email"
@@ -92,7 +103,7 @@ const Login = () => {
           />
           <InputField
             label="Password"
-            type="text"
+            type="password"
             name="passWord"
             value={formData.passWord}
             onChange={handleChange}
@@ -100,17 +111,29 @@ const Login = () => {
             required
             error={errors.passWord}
           />
+
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg"
+            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200"
             disabled={loading}
           >
             {loading ? 'Signing In...' : 'Sign In'}
           </button>
 
-          <GoogleButton onClick={handleFirebaseLogin}/>
-        
+          <div className="text-center text-sm text-gray-500">or</div>
+           <div className="flex justify-center"> <GoogleButton onClick={handleFirebaseLogin} /></div>
+         
         </form>
+
+        <div className="text-center text-sm text-gray-600">
+          New here?{' '}
+          <Link
+            to="/signup"
+            className="text-blue-600 hover:text-blue-800 font-medium transition duration-150"
+          >
+            Create an account
+          </Link>
+        </div>
       </div>
     </div>
   );

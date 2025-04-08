@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import InputField from "../../components/inputField";
 import { connect, useSelector } from "react-redux";
 
+
 import {
   addDemographicDetails,
   updateDemographicDetails,
@@ -79,7 +80,11 @@ const DemographicForm = ({
       profilePicture: null,
     },
   });
+  const [showInput, setShowInput] = useState(false);
 
+  const handleToggleInput = () => {
+    setShowInput(true);
+  };
   // Fetch demographic details when component mounts
   useEffect(() => {
     fetchDemographicDetails();
@@ -199,167 +204,189 @@ const DemographicForm = ({
   };
 
   if (isLoading) {
-    return "loading.....";
-  }
+    return (
+        <div className="flex justify-center items-center h-screen">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        </div>
+    );
+}
 // console.log("formData", formData);
 
 
-
-
   return (
-    <div className="max-w-2xl mx-auto pt-20">
-      <form onSubmit={handleSubmit} disabled={isLoading}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <InputField
-            label="Patient Name"
-            name="firstName"
-            value={formData.userName}
-            onChange={(e) => handleChange("userName", e.target.value)}
-            required
-            disabled={isLoading}
-          />
+    <div className="pt-20 max-w-3xl mx-auto py-12 px-6 bg-white shadow-md rounded-xl">
+  <h2 className="text-2xl font-bold text-center mb-6 text-blue-700">Patient Information</h2>
 
-          <InputField
-            label="Profile Image"
-            type="file"
-            name="profilePicture"
-            accept="image/*"
-            onChange={(e) => handleChange("profilePicture", e.target.files[0])}
+  <form onSubmit={handleSubmit}>
+    <fieldset disabled={isLoading} className="space-y-4">
+      {/* Profile Image */}
+      <div className="flex flex-col items-center mb-6">
+        {preview ? (
+          <img
+            src={preview}
+            alt="Profile Preview"
+            className="w-32 h-32 rounded-full object-cover border-4 border-blue-300 shadow-sm"
           />
-         {preview && (
-        <img src={preview} alt="Profile Preview" style={{ maxWidth: '100px' }} />
+        ) : (
+          <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
+            No Image
+          </div>
+        )}
+        <label  onClick={handleToggleInput} className="mt-3 block text-sm font-medium text-gray-700">Change Image</label>
+        {showInput && (
+        <InputField
+          type="file"
+          name="profilePicture"
+          accept="image/*"
+          onChange={(e) => {
+            handleChange('profilePicture', e.target.files[0]);
+            setShowInput(false); 
+          }}
+          className="mt-1 text-sm"
+        />
       )}
-          
-          <InputField
-            label="Date of Birth"
-            type="date"
-            name="dateOfBirth"
-            value={formData.dateOfBirth}
-            onChange={(e) => handleChange("dateOfBirth", e.target.value)}
-          />
+      </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Gender
-            </label>
-            <select
-              name="gender"
-              value={formData.gender}
-              onChange={(e) => handleChange("gender", e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border border-gray-300 rounded"
-            >
-              <option value="">Select gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-              <option value="Prefer not to say">Prefer not to say</option>
-            </select>
-          </div>
+      {/* Form Fields */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <InputField
+          label="Patient Name"
+          name="userName"
+          value={formData.userName}
+          onChange={(e) => handleChange("userName", e.target.value)}
+          required
+          disabled={isLoading}
+        />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Blood Group
-            </label>
-            <select
-              name="bloodGroup"
-              value={formData.bloodGroup}
-              onChange={(e) => handleChange("bloodGroup", e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border border-gray-300 rounded"
-            >
-              <option value="">Select blood group</option>
-              <option value="A+">A+</option>
-              <option value="A-">A-</option>
-              <option value="B+">B+</option>
-              <option value="B-">B-</option>
-              <option value="AB+">AB+</option>
-              <option value="AB-">AB-</option>
-              <option value="O+">O+</option>
-              <option value="O-">O-</option>
-            </select>
-          </div>
+        <InputField
+          label="Date of Birth"
+          type="date"
+          name="dateOfBirth"
+          value={formData.dateOfBirth}
+          onChange={(e) => handleChange("dateOfBirth", e.target.value)}
+        />
 
-          <InputField
-            label="Height (cm)"
-            type="number"
-            name="height"
-            value={formData.height}
-            onChange={(e) => handleChange("height", e.target.value)}
-          />
-
-          <InputField
-            label="Weight (kg)"
-            type="number"
-            name="weight"
-            value={formData.weight}
-            onChange={(e) => handleChange("weight", e.target.value)}
-          />
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Marital Status
-            </label>
-            <select
-              name="maritalStatus"
-              value={formData.maritalStatus}
-              onChange={(e) => handleChange("maritalStatus", e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border border-gray-300 rounded"
-            >
-              <option value="">Select marital status</option>
-              <option value="Single">Single</option>
-              <option value="Married">Married</option>
-              <option value="Divorced">Divorced</option>
-              <option value="Widowed">Widowed</option>
-            </select>
-          </div>
-
-          <InputField
-            label="Occupation"
-            type="text"
-            name="occupation"
-            value={formData.occupation}
-            onChange={(e) => handleChange("occupation", e.target.value)}
-          />
-
-          <InputField
-            label="Street Address"
-            name="address.street"
-            value={formData.address.street}
-            onChange={(e) => handleChange("address.street", e.target.value)}
-          />
-
-          <InputField
-            label="City"
-            name="address.city"
-            value={formData.address.city}
-            onChange={(e) => handleChange("address.city", e.target.value)}
-          />
-
-          <InputField
-            label="State"
-            name="address.state"
-            value={formData.address.state}
-            onChange={(e) => handleChange("address.state", e.target.value)}
-          />
-
-          <InputField
-            label="Zip Code"
-            name="address.zipCode"
-            value={formData.address.zipCode}
-            onChange={(e) => handleChange("address.zipCode", e.target.value)}
-            disabled={isLoading}
-          />
+        {/* Gender Select */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Gender</label>
+          <select
+            name="gender"
+            value={formData.gender}
+            onChange={(e) => handleChange("gender", e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
+          >
+            <option value="">Select gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+            <option value="Prefer not to say">Prefer not to say</option>
+          </select>
         </div>
 
-        <button
-          type="submit"
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          disabled={isLoading}
-        >
-          {isUpdateForm ? "Update" : "Create"}
-        </button>
-        {error && <p className="mt-2 text-red-500">{error}</p>}
-      </form>
-    </div>
+        {/* Blood Group Select */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Blood Group</label>
+          <select
+            name="bloodGroup"
+            value={formData.bloodGroup}
+            onChange={(e) => handleChange("bloodGroup", e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
+          >
+            <option value="">Select blood group</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+          </select>
+        </div>
+
+        <InputField
+          label="Height (cm)"
+          type="number"
+          name="height"
+          value={formData.height}
+          onChange={(e) => handleChange("height", e.target.value)}
+        />
+
+        <InputField
+          label="Weight (kg)"
+          type="number"
+          name="weight"
+          value={formData.weight}
+          onChange={(e) => handleChange("weight", e.target.value)}
+        />
+
+        {/* Marital Status Select */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Marital Status</label>
+          <select
+            name="maritalStatus"
+            value={formData.maritalStatus}
+            onChange={(e) => handleChange("maritalStatus", e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
+          >
+            <option value="">Select marital status</option>
+            <option value="Single">Single</option>
+            <option value="Married">Married</option>
+            <option value="Divorced">Divorced</option>
+            <option value="Widowed">Widowed</option>
+          </select>
+        </div>
+
+        <InputField
+          label="Occupation"
+          type="text"
+          name="occupation"
+          value={formData.occupation}
+          onChange={(e) => handleChange("occupation", e.target.value)}
+        />
+
+        <InputField
+          label="Street Address"
+          name="address.street"
+          value={formData.address.street}
+          onChange={(e) => handleChange("address.street", e.target.value)}
+        />
+
+        <InputField
+          label="City"
+          name="address.city"
+          value={formData.address.city}
+          onChange={(e) => handleChange("address.city", e.target.value)}
+        />
+
+        <InputField
+          label="State"
+          name="address.state"
+          value={formData.address.state}
+          onChange={(e) => handleChange("address.state", e.target.value)}
+        />
+
+        <InputField
+          label="Zip Code"
+          name="address.zipCode"
+          value={formData.address.zipCode}
+          onChange={(e) => handleChange("address.zipCode", e.target.value)}
+        />
+      </div>
+
+      {/* Submit Button */}
+      <button
+        type="submit"
+        className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+        disabled={isLoading}
+      >
+        {isUpdateForm ? "Update" : "Create"}
+      </button>
+
+      {error && <p className="mt-3 text-center text-red-500">{error}</p>}
+    </fieldset>
+  </form>
+</div>
   );
 };
 

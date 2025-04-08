@@ -11,7 +11,7 @@ export default function appointmentReducer(state = initialState, action) {
         case APPOINTMENT_REQUEST:
             return {
                 ...state,
-                loading: action.payload,
+                loading: true,
                 error: null
             };
         case APPOINTMENT_SUCCESS:

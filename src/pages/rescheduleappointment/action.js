@@ -1,9 +1,17 @@
 import { showMessage } from "../../utils/ToastMessage/ShowMessage";
 
+export const GET_EXISTING_APPOINTMENT_DETAILS_REQUEST = "GET_EXISTING_APPOINTMENT_DETAILS_REQUEST";
+export const GET_EXISTING_APPOINTMENT_DETAILS_SUCCESS = "GET_EXISTING_APPOINTMENT_DETAILS_SUCCESS";
+export const GET_EXISTING_APPOINTMENT_DETAILS_FAILURE = "GET_EXISTING_APPOINTMENT_DETAILS_FAILURE";
+export const RESCHEDULE_APPOINTMENT_REQUEST = "RESCHEDULE_APPOINTMENT_REQUEST";
+export const RESCHEDULE_APPOINTMENT_SUCCESS = "RESCHEDULE_APPOINTMENT_SUCCESS";
+export const RESCHEDULE_APPOINTMENT_FAILURE = "RESCHEDULE_APPOINTMENT_FAILURE";
+
+
 // Client/src/store/action.js
 export const getExistingAppointmentDetails = (appointmentId) => {
   return (dispatch, getState) => {
-    dispatch({ type: "GET_EXISTING_APPOINTMENT_DETAILS_REQUEST" });
+    dispatch({ type: GET_EXISTING_APPOINTMENT_DETAILS_REQUEST });
 
     try {
       // Get appointment from state instead of API
@@ -22,12 +30,12 @@ export const getExistingAppointmentDetails = (appointmentId) => {
       }
 
       dispatch({
-        type: "GET_EXISTING_APPOINTMENT_DETAILS_SUCCESS",
+        type: GET_EXISTING_APPOINTMENT_DETAILS_SUCCESS,
         payload: existingAppointment,
       });
     } catch (error) {
       dispatch({
-        type: "GET_EXISTING_APPOINTMENT_DETAILS_FAILURE",
+        type: GET_EXISTING_APPOINTMENT_DETAILS_FAILURE,
         payload: error.message,
       });
     }
@@ -39,7 +47,7 @@ export const rescheduleAppointment = (appointmentId, newDateTime, navigate) => {
   const token = localStorage.getItem("token");
 
   return async (dispatch) => {
-    dispatch({ type: "RESCHEDULE_APPOINTMENT_REQUEST" });
+    dispatch({ type: RESCHEDULE_APPOINTMENT_REQUEST });
 
     return fetch(`${backendUrl}/appointments/${appointmentId}`, {
       method: "PUT",
@@ -60,7 +68,7 @@ export const rescheduleAppointment = (appointmentId, newDateTime, navigate) => {
       })
       .then((data) => {
         dispatch({
-          type: "RESCHEDULE_APPOINTMENT_SUCCESS",
+          type: RESCHEDULE_APPOINTMENT_SUCCESS,
           payload: data,
         });
         setTimeout(() => 
@@ -70,7 +78,7 @@ export const rescheduleAppointment = (appointmentId, newDateTime, navigate) => {
       })
       .catch((error) => {
         dispatch({
-          type: "RESCHEDULE_APPOINTMENT_FAILURE",
+          type: RESCHEDULE_APPOINTMENT_FAILURE,
           payload: error.message || "Something went wrong",
         });
         showMessage("error", error.message || "Something went wrong");

@@ -37,10 +37,10 @@ const loginaction = (formData, navigate) => async (dispatch) => {
       }
 
       dispatch(loginSuccess(data));
-      showMessage("success" ,"Login successful!" );
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
+      showMessage("success" ,"Logged in Successfully!" );
+      // setTimeout(() => {
+        navigate("/dashboard");
+      // }, 2000);
     })
     .catch((error) => {
       const errorMessage = error.message || "Signup failed. Please try again.";
@@ -77,7 +77,7 @@ const firebaseLoginAction = (formData, navigate) => async (dispatch) => {
     dispatch(loginSuccess(formData));
     showMessage("success", "Authentication successful!");
     setTimeout(() => {
-      navigate("/");
+      navigate("/dashboard");
     }, 2000);
   } catch (error) {
     const errorMessage = error.message || "Authentication failed. Please try again.";
