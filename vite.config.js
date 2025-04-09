@@ -24,9 +24,9 @@ export default defineConfig({
   optimizeDeps: {
     esbuildOptions: {
       define: {
-        'global:TextEncoder': 'TextEncoder',
-        'global:Readable': 'Readable',
-        'global:Buffer': 'Buffer'
+        Readable: 'Readable',
+        Buffer: 'Buffer',
+        TextEncoder: 'TextEncoder'
       },
     },
   },
