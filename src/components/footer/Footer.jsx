@@ -2,7 +2,7 @@
 import React from "react";
 import { FaFacebook, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import Img from "../../../public/ecare1.png";
+const Img = "/ecare1.png";
 
 const Footer = () => {
   return (

@@ -23,7 +23,10 @@ const AppointmentHistory = () => {
 
   const handleCancel = (appointment) => {
     dispatch(cancelAppointment(appointment._id));
-    window.location.reload(); 
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+     
   };
 
   if (isLoading) {

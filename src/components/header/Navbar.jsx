@@ -2,7 +2,8 @@
 import React from "react";
 import { FiMenu, FiX, FiUser, FiSettings } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
-import Img from "../../../public/ecare1.png";
+const Img = "/ecare1.png";
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false);
