@@ -6,9 +6,9 @@ import {
     GET_EXISTING_APPOINTMENT_DETAILS_FAILURE,
     RESCHEDULE_APPOINTMENT_REQUEST,
     RESCHEDULE_APPOINTMENT_SUCCESS,
-    RESCHEDULE_APPOINTMENT_FAILURE,
   } from './action'; // adjust path as needed
-  
+  import { describe, it, expect, vi, beforeEach } from 'vitest';
+
   import { showMessage } from '../../utils/ToastMessage/ShowMessage';
   
   vi.mock('../../utils/ToastMessage/ShowMessage', () => ({

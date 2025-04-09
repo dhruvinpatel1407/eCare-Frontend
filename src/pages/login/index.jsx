@@ -6,7 +6,7 @@ import { showMessage } from '../../utils/ToastMessage/ShowMessage';
 import { loginaction, firebaseLoginAction } from './action';
 import { useSelector, useDispatch } from 'react-redux';
 import GoogleButton from 'react-google-button'
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { signInWithPopup } from 'firebase/auth';
 import * as actions from "./action";
 import { auth, provider } from '../../config/firebase';
 import { Link } from 'react-router-dom';
@@ -19,7 +19,7 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector(state => state.login);
+  const { loading } = useSelector(state => state.login);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,7 +40,7 @@ const Login = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      const token = await user.getIdToken(); 
+       
       
       // Dispatch action to update user state
       dispatch(firebaseLoginAction({

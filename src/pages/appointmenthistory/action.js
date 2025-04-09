@@ -70,7 +70,7 @@ const fetchAppointments = () => async (dispatch) => {
     const token = localStorage.getItem("token");
         const backendUrl = import.meta.env.VITE_BACKEND_URL 
     return async (dispatch) => {
-        dispatch(requestAppointment());
+        dispatch(appointmentRequest());
         try {
             // Add your API call here
             const response = await fetch(`${backendUrl}/appointments/${appointmentId}`, {

@@ -4,7 +4,8 @@ import {
     FETCH_SERVICES_FAILURE,
     fetchServices,
   } from "./action"; // adjust path as needed
-  
+  import { describe, it, expect, vi, beforeEach } from 'vitest';
+
   global.fetch = vi.fn();
   
   describe("fetchServices action", () => {

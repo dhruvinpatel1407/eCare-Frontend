@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { signup, SIGNUP_REQUEST, SIGNUP_SUCCESS, SIGNUP_FAILURE } from './action';
 import { setAuthToken } from "../../utils/SetToken";
 import { showMessage } from '../../utils/ToastMessage/ShowMessage';

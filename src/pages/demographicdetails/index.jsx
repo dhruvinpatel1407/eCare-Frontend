@@ -19,16 +19,16 @@ const convertIsoDate = (isoDate) => {
   return `${year}-${month}-${day}`;
 };
 
-const bufferToImage = (buffer, mimeType = "image/jpeg") => {
-  if (!buffer || buffer.length === 0) return "";
+// const bufferToImage = (buffer, mimeType = "image/jpeg") => {
+//   if (!buffer || buffer.length === 0) return "";
 
-  // Ensure it's converted to Uint8Array
-  const uint8Array = new Uint8Array(buffer);
-  console.log(uint8Array);
-  const blob = new Blob([uint8Array], { type: mimeType });
-  console.log("blob",blob,URL.createObjectURL(blob) );
-  return URL.createObjectURL(blob);
-};;
+//   // Ensure it's converted to Uint8Array
+//   const uint8Array = new Uint8Array(buffer);
+//   console.log(uint8Array);
+//   const blob = new Blob([uint8Array], { type: mimeType });
+//   console.log("blob",blob,URL.createObjectURL(blob) );
+//   return URL.createObjectURL(blob);
+// };;
 
 
 // Add this helper function to convert dd/mm/yyyy back to ISO format

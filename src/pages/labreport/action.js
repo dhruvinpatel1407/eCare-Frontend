@@ -16,80 +16,62 @@ export const DOWNLOAD_REPORT_FAILURE = 'DOWNLOAD_REPORT_FAILURE';
 
 // Helper functions for API calls
 const apiGetReports = async () => {
-  try {
-    const token = localStorage.getItem("token");
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
-    
-    const response = await fetch(`${backendUrl}/pdf`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    
-    if (!response.ok) {
-      throw new Error("Failed to fetch reports");
-    }
-    return await response.json();
-  } catch (error) {
-    throw error;
+  const token = localStorage.getItem("token");
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+  const response = await fetch(`${backendUrl}/pdf`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch reports");
   }
+
+  return await response.json();
 };
 
 const apiUploadReport = async (formData) => {
-  try {
-    const token = localStorage.getItem("token");
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
-    
-    const response = await fetch(`${backendUrl}/pdf`, {
-      method: "POST",
-      headers: {
-        // "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    });
-    
-    if (!response.ok) {
-      throw new Error("Failed to upload report");
-    }
-    return await response.json();
-  } catch (error) {
-    throw error;
+  const token = localStorage.getItem("token");
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+  const response = await fetch(`${backendUrl}/pdf`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to upload report");
   }
+
+  return await response.json();
 };
 
 // Add new helper function for download
 const apiDownloadReport = async (filename) => {
-  console.log(filename);
   const token = localStorage.getItem("token");
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  console.log(backendUrl);
-  try {
-   
-    console.log(filename);
-    const response = await fetch(`${backendUrl}/pdf/${filename}`, {
-      method: "GET",
-      headers: {
-        // "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    
-    if (!response.ok) {
-      throw new Error("Failed to download report");
-    }
-    
-    // Get the file stream
-    const blob = await response.blob();
-    const downloadUrl = URL.createObjectURL(blob);
-    console.log(downloadUrl);
-    return { blob, downloadUrl };
-    
-  } catch (error) {
-    throw error;
+
+  const response = await fetch(`${backendUrl}/pdf/${filename}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to download report");
   }
+
+  const blob = await response.blob();
+  const downloadUrl = URL.createObjectURL(blob);
+  return { blob, downloadUrl };
 };
 
 // Action creators

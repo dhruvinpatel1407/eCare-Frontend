@@ -1,33 +1,22 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
-import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import tailwindcss from '@tailwindcss/vite';
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
-    mainFields: ["module", "main", "jsnext:main", "jsnext"],
+    alias: {
+      '@': '/src',
+    },
   },
   test: {
     globals: true,
-    environment: "jsdom",
-    setupFiles: "./src/utils/setupTestEnvironment.js", // Path to your test setup file
-    testFiles: [
-      "**/*.{test,spec}.js", // Default pattern to find test files
-      "**/*.test.jsx", // For React test files
-      "**/*.spec.jsx", // For React test files
-    ],
+    environment: 'jsdom',
+    setupFiles: './src/utils/setupTestEnvironment.js',
+    include: ['**/*.{test,spec}.{js,jsx,ts,tsx}'],
   },
-  ssr: {
-    external: ['util', 'path', 'stream', 'url', 'os', 'tty', 'assert', 'buffer', 'events', 'vm', 'fs/promises', 'timers', 'console'],
-  },
-  optimizeDeps: {
-    esbuildOptions: {
-      define: {
-        Readable: 'Readable',
-        Buffer: 'Buffer',
-        TextEncoder: 'TextEncoder'
-      },
-    },
+  build: {
+    sourcemap: true,
+    chunkSizeWarningLimit: 1500, // optional, increase if needed
   },
 });

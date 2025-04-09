@@ -5,6 +5,7 @@ import {
   APPOINTMENT_FAILURE,
   APPOINTMENT_SUCCESS_UPDATE
 } from './action';
+import { describe, it, expect } from 'vitest';
 
 describe("appointmentReducer", () => {
   const initialState = {

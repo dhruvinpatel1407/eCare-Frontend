@@ -10,6 +10,7 @@ import {
   BOOK_APPOINTMENT_SUCCESS,
   BOOK_APPOINTMENT_FAILURE
 } from "./action";
+import { describe, it, expect } from 'vitest';
 
 describe("bookingReducer", () => {
   const initialState = {

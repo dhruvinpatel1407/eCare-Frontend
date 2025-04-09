@@ -18,8 +18,6 @@ const DoctorCard = ({
     rating = 0,
     date = "",
     time = "",
-    status = "",
-    patientName = "",
     id = ""
   } = data;
 

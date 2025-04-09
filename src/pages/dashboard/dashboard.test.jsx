@@ -1,6 +1,6 @@
 // Client/src/pages/dashboard/__tests__/action.test.js
 import { fetchDoctors, DOCTOR_REQUEST, DOCTOR_SUCCESS, DOCTOR_FAILURE } from './action';
-import { vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 describe('fetchDoctors action', () => {
   beforeEach(() => {

@@ -6,6 +6,7 @@ import {
   ADD_DEMOGRAPHIC_DETAILS,
   UPDATE_DEMOGRAPHIC_DETAILS
 } from './action';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 global.fetch = vi.fn();
 
