@@ -11,7 +11,7 @@ describe('Footer component', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('eCare')).toBeInTheDocument();
+    expect(screen.getByTestId('logo-image')).toBeInTheDocument();
     expect(
       screen.getByText(/Your trusted partner in healthcare/i)
     ).toBeInTheDocument();

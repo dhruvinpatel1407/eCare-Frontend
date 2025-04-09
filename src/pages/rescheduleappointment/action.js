@@ -16,7 +16,7 @@ export const getExistingAppointmentDetails = (appointmentId) => {
     try {
       // Get appointment from state instead of API
       const allAppointments = getState().appointment.appointments;
-      console.log("allAppointments", allAppointments);
+     
 
       if (!allAppointments) {
         throw new Error("No appointments found in state");

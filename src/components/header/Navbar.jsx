@@ -2,7 +2,7 @@
 import React from "react";
 import { FiMenu, FiX, FiUser, FiSettings } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
-
+import Img from "../../../public/ecare1.png";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false);
@@ -40,7 +40,9 @@ const Navbar = () => {
           {/* Left side - Brand and main menu */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-1">
-              <span className="text-2xl font-bold text-blue-400">eCare</span>
+              <span className="text-2xl font-bold text-blue-400" data-testid="logo-image">
+                <img src={Img} alt="Logo" width="140" height="140" />
+              </span>
             </Link>
           </div>
 
@@ -72,12 +74,12 @@ const Navbar = () => {
               <FiSettings className="text-gray-300" size={20} />
             </button>
             <button
-            data-testid="user-menu-button"
+              data-testid="user-menu-button"
               className="p-2 rounded-full hover:bg-gray-700 relative"
               onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
               ref={userMenuRef}
             >
-              <FiUser  className="text-gray-300" size={20} />
+              <FiUser className="text-gray-300" size={20} />
               {isUserMenuOpen && (
                 <div className="absolute right-0 top-14 bg-gray-800 shadow-lg rounded-md py-2 px-4 w-48 z-50">
                   <div className="flex flex-col space-y-2">
@@ -93,12 +95,17 @@ const Navbar = () => {
                     >
                       Medicle Reports
                     </Link>
-                    <button
+                    <div
                       onClick={handleLogout}
-                      className="text-red-500 hover:text-red-600"
+                      role="button"
+                      tabIndex={0}
+                      className="text-red-500 hover:text-red-600 cursor-pointer"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleLogout();
+                      }}
                     >
                       Logout
-                    </button>
+                    </div>
                   </div>
                 </div>
               )}

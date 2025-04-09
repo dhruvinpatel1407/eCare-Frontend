@@ -1,7 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
-console.log(import.meta.env.VITE_APP_FIREBASE_API_KEY);
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_FIREBASE_API_KEY,
@@ -17,13 +16,13 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 // Function to handle Google sign-in
-async function handleGoogleSignIn() {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    console.log('User signed in:', result.user);
-  } catch (error) {
-    console.error('Error signing in:', error);
-  }
-}
+// async function handleGoogleSignIn() {
+//   try {
+//     const result = await signInWithPopup(auth, provider);
+//     console.log('User signed in:', result.user);
+//   } catch (error) {
+//     console.error('Error signing in:', error);
+//   }
+// }
 
 export { auth, provider, signInWithPopup };

@@ -13,6 +13,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import PropTypes from "prop-types";
 import Labreport from "../../pages/labreport";
+import FrequentQuestions from "../../pages/frequentquestions";
 
 
 
@@ -63,6 +64,7 @@ const RoutesManager = () => {
             <Route path="/services" element={<ServicesPage/> } /> 
             <Route path="/demographics" element={<DemographicForm/> } />
             <Route path="/report" element={<Labreport />} />
+            <Route path="/frequent-questions" element={<FrequentQuestions />} />
           </Routes>
         </Layout>
       </BrowserRouter>

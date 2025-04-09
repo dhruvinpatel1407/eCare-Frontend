@@ -36,12 +36,12 @@ const Login = () => {
   };
  
   const handleFirebaseLogin = async () => {
-    console.log("button clicked")
+   
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const token = await user.getIdToken(); 
-      console.log(result);
+      
       // Dispatch action to update user state
       dispatch(firebaseLoginAction({
         uid: user.uid,
@@ -49,7 +49,7 @@ const Login = () => {
         displayName: user.displayName
       }, navigate));
     } catch (error) {
-      console.log(error);
+      
       dispatch({
         type: actions.LOGIN_FAILURE,
         payload: error.message

@@ -26,7 +26,7 @@ describe('Navbar component', () => {
         <Navbar />
       </MemoryRouter>
     );
-    expect(screen.getByText('eCare')).toBeInTheDocument();
+    expect(screen.getByTestId('logo-image')).toBeInTheDocument();
   });
 
   it('renders main desktop links', () => {

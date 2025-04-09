@@ -2,17 +2,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {
-  getExistingAppointmentDetails,
-  rescheduleAppointment
-} from "./action";
+import { getExistingAppointmentDetails, rescheduleAppointment } from "./action";
 
 const generateTimeSlots = () => {
   const timeSlots = [];
-  
+
   // Morning slots (9:00 AM to 1:00 PM)
   for (let i = 9; i < 13; i++) {
     timeSlots.push(`${i}:00 AM`);
@@ -32,20 +29,19 @@ const RescheduleAppointment = () => {
   const navigate = useNavigate();
   const appointmentId = params.id;
 
-  const { 
-    loading, 
+  const {
+    loading,
     existingAppointment,
-    bookedTimeSlots = [], 
-    error 
+    bookedTimeSlots = [],
+    error,
   } = useSelector((state) => state.reschedule);
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
-  
+
   useEffect(() => {
     dispatch(getExistingAppointmentDetails(appointmentId));
-    
   }, [dispatch, appointmentId]);
 
   useEffect(() => {
@@ -67,7 +63,9 @@ const RescheduleAppointment = () => {
         });
 
       // Filter available slots
-      const availableSlots = allSlots.filter((slot) => !bookedTimes.includes(slot));
+      const availableSlots = allSlots.filter(
+        (slot) => !bookedTimes.includes(slot)
+      );
 
       setAvailableTimeSlots(availableSlots);
     }
@@ -75,15 +73,15 @@ const RescheduleAppointment = () => {
 
   useEffect(() => {
     if (existingAppointment) {
-     
       // Split the bookedTime string into date and time parts
-      const [datePart, timePart, period] = existingAppointment.bookedTime.split(/\s+/); 
-      const [day, month, year] = datePart.split('/');
-      const existingTIme = `${timePart} ${period}`; 
-      
+      const [datePart, timePart, period] =
+        existingAppointment.bookedTime.split(/\s+/);
+      const [day, month, year] = datePart.split("/");
+      const existingTIme = `${timePart} ${period}`;
+
       // Create a valid Date object
       const appointmentDate = new Date(year, month - 1, day); // Months are 0-based in JavaScript
-      
+
       setSelectedDate(appointmentDate);
       setSelectedTime(existingTIme);
     }
@@ -98,7 +96,7 @@ const RescheduleAppointment = () => {
 
     const formattedDate = selectedDate.toLocaleDateString("en-GB");
     const formattedDateTime = `${formattedDate} ${selectedTime}`;
-    
+
     dispatch(rescheduleAppointment(appointmentId, formattedDateTime, navigate));
   };
 
@@ -110,72 +108,76 @@ const RescheduleAppointment = () => {
     );
   }
 
-  // if (error) {
-  //   return (
-  //     <div className="flex justify-center items-center h-screen text-red-500">
-  //       Error: {error}
-  //     </div>
-  //   );
-  // }
-
   return (
-    <div className="container mx-auto p-4 max-w-4xl">
-      <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
+    <div className="pt-20 container mx-auto p-4 max-w-4xl">
+      <div className="bg-white rounded-2xl shadow-xl p-8 space-y-8 border border-gray-100">
         {/* Existing Appointment Info */}
-        <div className="existing-appointment-info space-y-4">
-          <h2 className="text-2xl font-semibold text-gray-800">
-            Current Appointment Details
+        <div className="space-y-3">
+          <h2 className="text-3xl font-bold text-blue-800">
+            Your Current Appointment
           </h2>
-          <p className="text-gray-700">
-            Date:{existingAppointment?.bookedTime.split(' ')[0]}
-          </p>
-          <p className="text-gray-700">Time: {selectedTime}</p>
+          <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-lg text-gray-700">
+            <p>
+              <span className="font-medium">Date:</span>{" "}
+              {existingAppointment?.bookedTime.split(" ")[0]}
+            </p>
+            <p>
+              <span className="font-medium">Time:</span> {selectedTime}
+            </p>
+          </div>
         </div>
 
         {/* Reschedule Section */}
-        <div className="reschedule-section space-y-6">
-          <h2 className="text-2xl font-semibold text-gray-800">
-            Select New Appointment Date
+        <div className="space-y-6">
+          <h2 className="text-2xl font-semibold text-blue-700 border-b pb-2 border-gray-200">
+            Reschedule Your Appointment
           </h2>
 
           {/* Date Picker */}
-          <div className="date-picker">
+          <div>
+            <label className="block mb-2 text-gray-700 font-medium">
+              Select a New Date
+            </label>
             <DatePicker
               selected={selectedDate}
               onChange={(date) => setSelectedDate(date)}
               minDate={new Date()}
-              className="w-full p-2 border rounded-lg"
+              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
               placeholderText="Select a date"
               dateFormat="dd/MM/yyyy"
             />
           </div>
 
-          <h3 className="text-lg font-medium text-gray-800">Available Time Slots</h3>
-
-          {/* Time Slots Grid */}
-          <div className="time-grid grid grid-cols-3 gap-2">
-            {availableTimeSlots.map((timeSlot, index) => (
-              <button
-                key={index}
-                onClick={() => handleTimeSelect(timeSlot)}
-                className={`p-3 rounded-lg text-center transition-colors ${
+          {/* Available Time Slots */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              Available Time Slots
+            </h3>
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+              {availableTimeSlots.map((timeSlot, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleTimeSelect(timeSlot)}
+                  className={`p-3 rounded-xl text-sm font-medium transition-all border
+                ${
                   selectedTime === timeSlot
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 hover:bg-gray-200'
+                    ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                    : "bg-white text-gray-800 border-gray-300 hover:bg-blue-50 hover:border-blue-300"
                 }`}
-              >
-                {timeSlot}
-              </button>
-            ))}
+                >
+                  {timeSlot}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Reschedule Button */}
           <button
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors"
             onClick={handleRescheduleAppointment}
             disabled={!selectedDate || !selectedTime}
+            className="w-full bg-blue-600 text-white py-3 px-4 rounded-xl font-semibold shadow-lg hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Reschedule Appointment
+            Confirm Reschedule
           </button>
         </div>
       </div>

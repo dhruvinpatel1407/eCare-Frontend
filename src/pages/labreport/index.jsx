@@ -111,24 +111,71 @@ const LabReport = ({
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {reports.map((report) => (
-                <tr key={report._id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                    {report.filename}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    {new Date(report.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <button
-                      onClick={(e) => handleDownload(e, report.filename)}
-                      className="text-blue-600 hover:underline text-sm"
-                    >
-                      Download
-                    </button>
+              {reports.length === 0 ? (
+                <tr>
+                  <td colSpan="3" className="py-12 text-center">
+                    <div className="flex flex-col items-center space-y-4">
+                      {/* Inline SVG for Empty State */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 200 200"
+                        className="w-64 h-64 text-blue-400"
+                        fill="none"
+                      >
+                        <rect width="200" height="200" rx="20" fill="#EFF6FF" />
+                        <g stroke="#3B82F6" strokeWidth="2">
+                          <rect
+                            x="50"
+                            y="40"
+                            width="100"
+                            height="120"
+                            rx="10"
+                            fill="#ffffff"
+                          />
+                          <line x1="60" y1="60" x2="140" y2="60" />
+                          <line x1="60" y1="75" x2="140" y2="75" />
+                          <line x1="60" y1="90" x2="120" y2="90" />
+                          <line x1="60" y1="105" x2="130" y2="105" />
+                          <line x1="60" y1="120" x2="100" y2="120" />
+                        </g>
+                        {/* <path
+    d="M150 130 L160 140 L150 150"
+    stroke="#60A5FA"
+    strokeWidth="4"
+    strokeLinecap="round"
+    fill="none"
+  /> */}
+                      </svg>
+
+                      {/* Message */}
+                      <p className="text-gray-500 text-lg">
+                        No reports uploaded yet. Click the{" "}
+                        <strong className="text-blue-600">+ button</strong> to
+                        add one!
+                      </p>
+                    </div>
                   </td>
                 </tr>
-              ))}
+              ) : (
+                reports.map((report) => (
+                  <tr key={report._id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                      {report.filename}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      {new Date(report.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={(e) => handleDownload(e, report.filename)}
+                        className="text-blue-600 hover:underline text-sm"
+                      >
+                        Download
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

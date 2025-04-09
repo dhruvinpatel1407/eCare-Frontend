@@ -11,7 +11,7 @@ import {
 
 const generateTimeSlots = () => {
   const timeSlots = [];
-  
+
   // Morning slots (9:00 AM to 1:00 PM)
   for (let i = 9; i < 13; i++) {
     timeSlots.push(`${i}:00 AM`);
@@ -29,9 +29,12 @@ const Booking = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const physicianId = params.id;
-  const { loading, physicianDetails, bookedTimeSlots = [], error } = useSelector(
-    (state) => state.booking
-  );
+  const {
+    loading,
+    physicianDetails,
+    bookedTimeSlots = [],
+    error,
+  } = useSelector((state) => state.booking);
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
@@ -64,7 +67,9 @@ const Booking = () => {
         });
 
       // Filter available slots
-      const availableSlots = allSlots.filter((slot) => !bookedTimes.includes(slot));
+      const availableSlots = allSlots.filter(
+        (slot) => !bookedTimes.includes(slot)
+      );
 
       setAvailableTimeSlots(availableSlots);
     }
@@ -79,8 +84,8 @@ const Booking = () => {
 
     const formattedDate = selectedDate.toLocaleDateString("en-GB"); // Ensure dd/mm/yyyy format
     const formattedDateTime = `${formattedDate} ${selectedTime}`;
-  
-    dispatch(bookAppointment(physicianId,formattedDateTime));
+
+    dispatch(bookAppointment(physicianId, formattedDateTime));
   };
 
   if (loading) {
@@ -100,32 +105,43 @@ const Booking = () => {
   }
 
   return (
-    <div className="container mx-auto p-4 max-w-4xl">
-      <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
+    <div className="pt-20 container mx-auto p-4 max-w-4xl">
+      <div className="bg-white rounded-2xl shadow-xl p-8 space-y-8 border border-gray-100">
         {/* Physician Info */}
-        <div className="physician-info space-y-4">
-          <h1 className="text-3xl font-bold text-gray-800">
+        <div className="physician-info space-y-3">
+          <h1 className="text-4xl font-extrabold text-blue-800">
             {physicianDetails.name}
           </h1>
-          <p className="text-xl text-gray-600">{physicianDetails.speciality}</p>
-          <p className="text-gray-700">📞 {physicianDetails.contactNumber}</p>
-          <p className="text-gray-700">📧 {physicianDetails.email}</p>
+          <p className="text-xl text-gray-700">{physicianDetails.speciality}</p>
+          <div className="text-gray-600 space-y-1">
+            <p>
+              📞{" "}
+              <span className="font-medium">
+                {physicianDetails.contactNumber}
+              </span>
+            </p>
+            <p>
+              📧 <span className="font-medium">{physicianDetails.email}</span>
+            </p>
+          </div>
         </div>
 
         {/* Clinic Info */}
         <div className="clinics-info space-y-4">
-          <h2 className="text-2xl font-semibold text-gray-800">
+          <h2 className="text-2xl font-semibold text-blue-700 border-b pb-2 border-gray-200">
             Available Clinics
           </h2>
           <div className="space-y-4">
             {physicianDetails.clinics?.map((clinic, index) => (
               <div
                 key={index}
-                className="clinic-card bg-gray-50 rounded-lg p-4 shadow-sm"
+                className="clinic-card bg-gradient-to-br from-blue-50 to-white border border-blue-100 rounded-xl p-4 shadow-sm hover:shadow-md transition"
               >
-                <h3 className="font-semibold text-gray-800">{clinic.clinicName}</h3>
+                <h3 className="font-semibold text-blue-800 text-lg">
+                  {clinic.clinicName}
+                </h3>
                 <p className="text-gray-700">{clinic.address}</p>
-                <p className="text-gray-700">{clinic.city}</p>
+                <p className="text-gray-600">{clinic.city}</p>
               </div>
             ))}
           </div>
@@ -133,48 +149,59 @@ const Booking = () => {
 
         {/* Booking Section */}
         <div className="booking-section space-y-6">
-          <h2 className="text-2xl font-semibold text-gray-800">
-            Select Appointment Date
+          <h2 className="text-2xl font-semibold text-blue-700 border-b pb-2 border-gray-200">
+            Book an Appointment
           </h2>
 
           {/* Date Picker */}
           <div className="date-picker">
+            <label className="block mb-2 text-gray-700 font-medium">
+              Select a Date
+            </label>
             <DatePicker
               selected={selectedDate}
               onChange={(date) => setSelectedDate(date)}
               minDate={new Date()}
-              className="w-full p-2 border rounded-lg"
+              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
               placeholderText="Select a date"
               dateFormat="dd/MM/yyyy"
+              filterDate={(date) => {
+                const day = date.getDay();
+                return day !== 0 && day !== 6; // 0 = Sunday, 6 = Saturday
+            }}
             />
           </div>
 
-          <h3 className="text-lg font-medium text-gray-800">Available Time Slots</h3>
-
-          {/* Time Slots Grid */}
-          <div className="time-grid grid grid-cols-3 gap-2">
-            {availableTimeSlots.map((timeSlot, index) => (
-              <button
-                key={index}
-                onClick={() => handleTimeSelect(timeSlot)}
-                className={`p-3 rounded-lg text-center transition-colors ${
+          {/* Time Slots */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              Available Time Slots
+            </h3>
+            <div className="time-grid grid grid-cols-3 sm:grid-cols-4 gap-3">
+              {availableTimeSlots.map((timeSlot, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleTimeSelect(timeSlot)}
+                  className={`p-3 rounded-xl text-sm font-medium transition-all border
+                ${
                   selectedTime === timeSlot
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 hover:bg-gray-200'
+                    ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                    : "bg-white text-gray-800 border-gray-300 hover:bg-blue-50 hover:border-blue-300"
                 }`}
-              >
-                {timeSlot}
-              </button>
-            ))}
+                >
+                  {timeSlot}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Book Button */}
           <button
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+            className={`w-full bg-blue-600 text-white py-3 px-4 rounded-xl font-semibold shadow-lg hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed`}
             onClick={handleBookAppointment}
             disabled={!selectedDate || !selectedTime}
           >
-            Book Appointment
+            Confirm Booking
           </button>
         </div>
       </div>

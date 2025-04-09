@@ -7,9 +7,16 @@ const formatDateTime = (bookedTime) => {
   return { date, time };
 };
 
-const AppointmentCard = ({ data, onReschedule, onCancel }) => {
+const AppointmentCard = ({ data, onReschedule, onCancel, isLoading }) => {
   const { date, time } = formatDateTime(data.bookedTime);
-
+  const isDisabled = data.status?.toLowerCase() === "cancelled";
+  if (isLoading) {
+    return (
+        <div className="flex justify-center items-center h-screen">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        </div>
+    );
+}
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-4">
       {/* Patient Name & Status */}
@@ -25,11 +32,15 @@ const AppointmentCard = ({ data, onReschedule, onCancel }) => {
 
       {/* Appointment Details */}
       <div className="space-y-2">
-        <p className="text-gray-600">Doctor: {data.physician.name}</p>
-        <p className="text-gray-600">Clinic: {data.physician.clinics[0].clinicName}</p>
+        <p className="text-gray-600">Doctor: {data.physician?.name}</p>
+        <p className="text-gray-600">
+          Clinic: {data.physician?.clinics?.[0]?.clinicName}
+        </p>
         <p className="text-gray-600">Date: {date}</p>
         <p className="text-gray-600">Time: {time}</p>
-        <p className="text-gray-600">Speciality: {data.physician.speciality}</p>
+        <p className="text-gray-600">
+          Speciality: {data.physician?.speciality}
+        </p>
       </div>
 
       {/* Buttons Section */}
@@ -37,12 +48,14 @@ const AppointmentCard = ({ data, onReschedule, onCancel }) => {
         <button
           onClick={() => onReschedule(data)}
           className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
+          disabled={isDisabled}
         >
           Reschedule
         </button>
         <button
           onClick={() => onCancel(data)}
           className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+          disabled={isDisabled}
         >
           Cancel
         </button>
