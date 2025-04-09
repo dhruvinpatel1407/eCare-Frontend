@@ -18,4 +18,16 @@ export default defineConfig({
       "**/*.spec.jsx", // For React test files
     ],
   },
+  ssr: {
+    external: ['util', 'path', 'stream', 'url', 'os', 'tty', 'assert', 'buffer', 'events', 'vm', 'fs/promises', 'timers', 'console'],
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      define: {
+        'global:TextEncoder': 'TextEncoder',
+        'global:Readable': 'Readable',
+        'global:Buffer': 'Buffer'
+      },
+    },
+  },
 });
