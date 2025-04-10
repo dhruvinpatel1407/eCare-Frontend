@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { getReports, uploadReport, downloadReport } from "./action";
 import { FaPlus } from "react-icons/fa";
+import { showMessage } from "../../utils/ToastMessage/ShowMessage";
 const LabReport = ({
   getReports,
   uploadReport,
@@ -16,15 +17,35 @@ const LabReport = ({
     getReports();
   }, [getReports]);
 
-  const handleUpload = () => {
-    // e.preventDefault();
+  const handleUpload = async() => {
+    
+    // File type validation
+  const allowedTypes = ["application/pdf"];
+  if (!allowedTypes.includes(selectedFile.type)) {
+    showMessage("error","Only PDF files are allowed");
+    return;
+  }
+
+// File size validation (5MB = 5 * 1024 * 1024 bytes)
+const maxSize = 5 * 1024 * 1024;
+if (selectedFile.size > maxSize) {
+  showMessage("error", "File size should not exceed 5MB");
+  return;
+}
+
     if (selectedFile) {
       const formData = new FormData();
       formData.append("pdf", selectedFile);
 
-      uploadReport(formData);
-      setShowUploadForm(false);
-      setSelectedFile(null);
+      try {
+        await uploadReport(formData); 
+        setShowUploadForm(false);
+        await getReports();           
+        setSelectedFile(null);
+      } catch (error) {
+        console.error("Upload failed:", error);
+      }
+      
     }
   };
 
@@ -53,9 +74,9 @@ const LabReport = ({
         {showUploadForm && (
           <div className="fixed inset-0 z-10 flex items-center justify-center bg-white bg-opacity-40 ">
             <form
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-                handleUpload(selectedFile);
+               await handleUpload(selectedFile);
                 setShowUploadForm(false);
               }}
               className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md mx-auto"
@@ -111,7 +132,7 @@ const LabReport = ({
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {reports.length === 0 ? (
+              {!loading && reports.length === 0 ? (
                 <tr>
                   <td colSpan="3" className="py-12 text-center">
                     <div className="flex flex-col items-center space-y-4">
@@ -138,13 +159,7 @@ const LabReport = ({
                           <line x1="60" y1="105" x2="130" y2="105" />
                           <line x1="60" y1="120" x2="100" y2="120" />
                         </g>
-                        {/* <path
-    d="M150 130 L160 140 L150 150"
-    stroke="#60A5FA"
-    strokeWidth="4"
-    strokeLinecap="round"
-    fill="none"
-  /> */}
+                        
                       </svg>
 
                       {/* Message */}

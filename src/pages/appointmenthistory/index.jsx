@@ -21,11 +21,14 @@ const AppointmentHistory = () => {
     navigate(`/reschedule/${appointment._id}`);
   };
 
-  const handleCancel = (appointment) => {
-    dispatch(cancelAppointment(appointment._id));
-    setTimeout(() => {
-      window.location.reload();
-    }, 500);
+  const handleCancel = async (appointment) => {
+    try {
+      await dispatch(cancelAppointment(appointment._id)); 
+      dispatch(fetchAppointments());                      
+    } catch (error) {
+      console.error("Failed to cancel appointment:", error.message);
+      
+    }
      
   };
 

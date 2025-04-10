@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import InputField from "../../components/inputField";
 import { connect, useSelector } from "react-redux";
-
+import { validateForm } from "../../utils/validations";
 
 import {
   addDemographicDetails,
   updateDemographicDetails,
   fetchDemographicDetails,
 } from "./action";
+import { showMessage } from "../../utils/ToastMessage/ShowMessage";
 
 // Add this helper function to convert ISO date to dd/mm/yyyy format
 const convertIsoDate = (isoDate) => {
@@ -19,6 +20,18 @@ const convertIsoDate = (isoDate) => {
   return `${year}-${month}-${day}`;
 };
 
+const convertDateFormat = (dateString) => {
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) {
+    return null; // Invalid date
+  }
+
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0"); // Adding 1 since months are 0-based
+  const day = String(date.getUTCDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
 // const bufferToImage = (buffer, mimeType = "image/jpeg") => {
 //   if (!buffer || buffer.length === 0) return "";
 
@@ -29,7 +42,6 @@ const convertIsoDate = (isoDate) => {
 //   console.log("blob",blob,URL.createObjectURL(blob) );
 //   return URL.createObjectURL(blob);
 // };;
-
 
 // Add this helper function to convert dd/mm/yyyy back to ISO format
 const convertDateToIso = (dateString) => {
@@ -57,7 +69,7 @@ const DemographicForm = ({
       state.demographic.demographicDetails[0] ||
       state.demographic.demographicDetails
   );
- 
+
   const demographicId = data?._id;
   // console.log(demographicId);
   // Initialize form data with default values
@@ -89,8 +101,7 @@ const DemographicForm = ({
   useEffect(() => {
     fetchDemographicDetails();
   }, [fetchDemographicDetails]);
-  // console.log(formData);
-  //  console.log(convertIsoDate(data.dateOfBirth));
+
   // Update form data when demographic details are fetched
   useEffect(() => {
     if (
@@ -98,7 +109,7 @@ const DemographicForm = ({
       (demographicDetails.length > 0 || demographicDetails?.message)
     ) {
       const demographicData = demographicDetails[0] || demographicDetails;
-      
+
       if (demographicData.message === "No demographics found") {
         // User is new, populate only the userName from userId
         setFormData((prev) => ({
@@ -107,18 +118,6 @@ const DemographicForm = ({
         }));
         setIsUpdateForm(false);
       } else {
-
-        // setTimeout(() => {
-        //   const buffer = demographicData?.profilePicture?.data;
-        //   console.log(buffer);
-        //   const imageUrl = buffer ? bufferToImage(buffer,demographicData?.profilePictureType) : "";
-        //   console.log(imageUrl);
-        //   setFormData((prev) => ({
-        //     ...prev,
-        //     profilePicture: imageUrl,
-        //   }));
-        // }, 300);
-
         // User has demographic details
         setFormData({
           userName: demographicData?.userId?.userName || "",
@@ -135,18 +134,19 @@ const DemographicForm = ({
             state: demographicData?.address?.state || "",
             zipCode: demographicData?.address?.zipCode || "",
           },
-          profilePicture : demographicData?.profilePicture || "",
+          profilePicture: demographicData?.profilePicture || "",
         });
         setIsUpdateForm(true);
         const buffer = demographicData?.profilePicture?.data;
         const mimeType = demographicData?.profilePictureType || "image/jpeg";
-  
+
         if (buffer && Array.isArray(buffer)) {
           const uint8Array = new Uint8Array(buffer);
           const blob = new Blob([uint8Array], { type: mimeType });
           const imageUrl = URL.createObjectURL(blob);
-  
-          setPreview(imageUrl);}
+
+          setPreview(imageUrl);
+        }
       }
     }
   }, [demographicDetails]);
@@ -158,12 +158,36 @@ const DemographicForm = ({
       dateOfBirth: convertDateToIso(formData.dateOfBirth),
     };
 
+    // Perform form validation using your existing validateForm function
+    const errors = validateForm(formData, "demographic");
+
+    const getFirstErrorMessage = (errors) => {
+      for (const key in errors) {
+        if (typeof errors[key] === "string" && errors[key] !== "") {
+          return errors[key];
+        } else if (typeof errors[key] === "object") {
+          const nestedError = getFirstErrorMessage(errors[key]);
+
+          if (nestedError) return nestedError;
+        }
+      }
+      return null;
+    };
+    // Check if there are any errors
+    const firstErrorMessage = getFirstErrorMessage(errors);
+
+    if (firstErrorMessage) {
+      // Show the first error message
+      showMessage("error", firstErrorMessage);
+      return;
+    }
     // If this is an update form, use updateDemographicDetails
     // If this is a create form, use addDemographicDetails
     if (isUpdateForm) {
       updateDemographicDetails(demographicId, formDataWithIsoDate);
     } else {
       addDemographicDetails(formData);
+      fetchDemographicDetails();
     }
   };
 
@@ -179,214 +203,228 @@ const DemographicForm = ({
   };
 
   const handleChange = (name, value) => {
-    if (name.includes('address')) {
-      const [parent, child] = name.split('.');
-      setFormData(prev => ({
+    if (name.includes("address")) {
+      const [parent, child] = name.split(".");
+      setFormData((prev) => ({
         ...prev,
         [parent]: {
           ...prev[parent],
-          [child]: value
-        }
+          [child]: value,
+        },
       }));
     } else if (name === "profilePicture") {
       handleFilePreview(value);
-     
-     setFormData(prev => ({
-      ...prev,
-      profilePicture : value
-     }))
-    } else {
-      setFormData(prev => ({
+
+      setFormData((prev) => ({
         ...prev,
-        [name]: value
+        profilePicture: value,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
       }));
     }
   };
 
   if (isLoading) {
     return (
-        <div className="flex justify-center items-center h-screen">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-        </div>
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
     );
-}
-// console.log("formData", formData);
-
+  }
+  // console.log("formData", formData);
 
   return (
     <div className="pt-20 max-w-3xl mx-auto py-12 px-6 bg-white shadow-md rounded-xl">
-  <h2 className="text-2xl font-bold text-center mb-6 text-blue-700">Patient Information</h2>
+      <h2 className="text-2xl font-bold text-center mb-6 text-blue-700">
+        Patient Information
+      </h2>
 
-  <form onSubmit={handleSubmit}>
-    <fieldset disabled={isLoading} className="space-y-4">
-      {/* Profile Image */}
-      <div className="flex flex-col items-center mb-6">
-        {preview ? (
-          <img
-            src={preview}
-            alt="Profile Preview"
-            className="w-32 h-32 rounded-full object-cover border-4 border-blue-300 shadow-sm"
-          />
-        ) : (
-          <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
-            No Image
+      <form onSubmit={handleSubmit}>
+        <fieldset disabled={isLoading} className="space-y-4">
+          {/* Profile Image */}
+          <div className="flex flex-col items-center mb-6">
+            {preview ? (
+              <img
+                src={preview}
+                alt="Profile Preview"
+                className="w-32 h-32 rounded-full object-cover border-4 border-blue-300 shadow-sm"
+              />
+            ) : (
+              <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
+                No Image
+              </div>
+            )}
+            <label
+              onClick={handleToggleInput}
+              className="mt-3 block text-sm font-medium text-gray-700"
+            >
+              Change Image
+            </label>
+            {showInput && (
+              <InputField
+                type="file"
+                name="profilePicture"
+                accept="image/*"
+                onChange={(e) => {
+                  handleChange("profilePicture", e.target.files[0]);
+                  setShowInput(false);
+                }}
+                className="mt-1 text-sm"
+              />
+            )}
           </div>
-        )}
-        <label  onClick={handleToggleInput} className="mt-3 block text-sm font-medium text-gray-700">Change Image</label>
-        {showInput && (
-        <InputField
-          type="file"
-          name="profilePicture"
-          accept="image/*"
-          onChange={(e) => {
-            handleChange('profilePicture', e.target.files[0]);
-            setShowInput(false); 
-          }}
-          className="mt-1 text-sm"
-        />
-      )}
-      </div>
 
-      {/* Form Fields */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <InputField
-          label="Patient Name"
-          name="userName"
-          value={formData.userName}
-          onChange={(e) => handleChange("userName", e.target.value)}
-          required
-          disabled={isLoading}
-        />
+          {/* Form Fields */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <InputField
+              label="Patient Name"
+              name="userName"
+              value={formData.userName}
+              onChange={(e) => handleChange("userName", e.target.value)}
+              required
+              disabled={isLoading}
+            />
 
-        <InputField
-          label="Date of Birth"
-          type="date"
-          name="dateOfBirth"
-          value={formData.dateOfBirth}
-          onChange={(e) => handleChange("dateOfBirth", e.target.value)}
-        />
+            <InputField
+              label="Date of Birth"
+              type="date"
+              name="dateOfBirth"
+              value={formData.dateOfBirth}
+              onChange={(e) => handleChange("dateOfBirth", e.target.value)}
+              max={convertDateFormat(new Date())}
+              disabled={isLoading}
+            />
 
-        {/* Gender Select */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Gender</label>
-          <select
-            name="gender"
-            value={formData.gender}
-            onChange={(e) => handleChange("gender", e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
+            {/* Gender Select */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Gender
+              </label>
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={(e) => handleChange("gender", e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
+              >
+                <option value="">Select gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+              </select>
+            </div>
+
+            {/* Blood Group Select */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Blood Group
+              </label>
+              <select
+                name="bloodGroup"
+                value={formData.bloodGroup}
+                onChange={(e) => handleChange("bloodGroup", e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
+              >
+                <option value="">Select blood group</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+            </div>
+
+            <InputField
+              label="Height (cm)"
+              type="number"
+              name="height"
+              value={formData.height}
+              onChange={(e) => handleChange("height", e.target.value)}
+            />
+
+            <InputField
+              label="Weight (kg)"
+              type="number"
+              name="weight"
+              value={formData.weight}
+              onChange={(e) => handleChange("weight", e.target.value)}
+            />
+
+            {/* Marital Status Select */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Marital Status
+              </label>
+              <select
+                name="maritalStatus"
+                value={formData.maritalStatus}
+                onChange={(e) => handleChange("maritalStatus", e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
+              >
+                <option value="">Select marital status</option>
+                <option value="Single">Single</option>
+                <option value="Married">Married</option>
+                <option value="Divorced">Divorced</option>
+                <option value="Widowed">Widowed</option>
+              </select>
+            </div>
+
+            <InputField
+              label="Occupation"
+              type="text"
+              name="occupation"
+              value={formData.occupation}
+              onChange={(e) => handleChange("occupation", e.target.value)}
+            />
+
+            <InputField
+              label="Street Address"
+              name="address.street"
+              value={formData.address.street}
+              onChange={(e) => handleChange("address.street", e.target.value)}
+            />
+
+            <InputField
+              label="City"
+              name="address.city"
+              value={formData.address.city}
+              onChange={(e) => handleChange("address.city", e.target.value)}
+            />
+
+            <InputField
+              label="State"
+              name="address.state"
+              value={formData.address.state}
+              onChange={(e) => handleChange("address.state", e.target.value)}
+            />
+
+            <InputField
+              label="Zip Code"
+              name="address.zipCode"
+              value={formData.address.zipCode}
+              onChange={(e) => handleChange("address.zipCode", e.target.value)}
+            />
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+            disabled={isLoading}
           >
-            <option value="">Select gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-            <option value="Prefer not to say">Prefer not to say</option>
-          </select>
-        </div>
+            {isUpdateForm ? "Update" : "Create"}
+          </button>
 
-        {/* Blood Group Select */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Blood Group</label>
-          <select
-            name="bloodGroup"
-            value={formData.bloodGroup}
-            onChange={(e) => handleChange("bloodGroup", e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
-          >
-            <option value="">Select blood group</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-          </select>
-        </div>
-
-        <InputField
-          label="Height (cm)"
-          type="number"
-          name="height"
-          value={formData.height}
-          onChange={(e) => handleChange("height", e.target.value)}
-        />
-
-        <InputField
-          label="Weight (kg)"
-          type="number"
-          name="weight"
-          value={formData.weight}
-          onChange={(e) => handleChange("weight", e.target.value)}
-        />
-
-        {/* Marital Status Select */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Marital Status</label>
-          <select
-            name="maritalStatus"
-            value={formData.maritalStatus}
-            onChange={(e) => handleChange("maritalStatus", e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
-          >
-            <option value="">Select marital status</option>
-            <option value="Single">Single</option>
-            <option value="Married">Married</option>
-            <option value="Divorced">Divorced</option>
-            <option value="Widowed">Widowed</option>
-          </select>
-        </div>
-
-        <InputField
-          label="Occupation"
-          type="text"
-          name="occupation"
-          value={formData.occupation}
-          onChange={(e) => handleChange("occupation", e.target.value)}
-        />
-
-        <InputField
-          label="Street Address"
-          name="address.street"
-          value={formData.address.street}
-          onChange={(e) => handleChange("address.street", e.target.value)}
-        />
-
-        <InputField
-          label="City"
-          name="address.city"
-          value={formData.address.city}
-          onChange={(e) => handleChange("address.city", e.target.value)}
-        />
-
-        <InputField
-          label="State"
-          name="address.state"
-          value={formData.address.state}
-          onChange={(e) => handleChange("address.state", e.target.value)}
-        />
-
-        <InputField
-          label="Zip Code"
-          name="address.zipCode"
-          value={formData.address.zipCode}
-          onChange={(e) => handleChange("address.zipCode", e.target.value)}
-        />
-      </div>
-
-      {/* Submit Button */}
-      <button
-        type="submit"
-        className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
-        disabled={isLoading}
-      >
-        {isUpdateForm ? "Update" : "Create"}
-      </button>
-
-      {error && <p className="mt-3 text-center text-red-500">{error}</p>}
-    </fieldset>
-  </form>
-</div>
+          {error && <p className="mt-3 text-center text-red-500">{error}</p>}
+        </fieldset>
+      </form>
+    </div>
   );
 };
 

@@ -110,8 +110,8 @@ const Signup = () => {
             name="mobileNumber"
             value={formData.mobileNumber}
             onChange={handleChange}
-            placeholder="Enter your mobile number (optional)"
-            required={false}
+            placeholder="Enter your mobile number"
+            required
             error={errors.mobileNumber}
           />
 

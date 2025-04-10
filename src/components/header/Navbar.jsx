@@ -32,7 +32,9 @@ const Navbar = () => {
   };
 
   const userMenuRef = React.createRef();
+  const menuRef = React.useRef(); 
   useOutsideClicker(userMenuRef, () => setIsUserMenuOpen(false));
+  useOutsideClicker(menuRef, () => setIsMenuOpen(false));
 
   return (
     <nav className="fixed w-full bg-gray-800 shadow-lg z-50">
@@ -128,22 +130,25 @@ const Navbar = () => {
 
         {/* Mobile menu */}
         {isMenuOpen && (
-          <div className="md:hidden absolute top-16 right-0 w-full bg-gray-800 shadow-lg">
+          <div ref={menuRef} className="md:hidden absolute top-16 right-0 w-full bg-gray-800 shadow-lg">
             <div className="flex flex-col items-center space-y-4 p-4">
               <Link
                 to="/dashboard"
+                onClick={() => setIsMenuOpen(false)}
                 className="text-gray-300 hover:text-blue-400"
               >
                 Home
               </Link>
               <Link
                 to="/services"
+                onClick={() => setIsMenuOpen(false)}
                 className="text-gray-300 hover:text-blue-400"
               >
                 Services
               </Link>
               <Link
                 to="/appointments"
+                onClick={() => setIsMenuOpen(false)}
                 className="text-gray-300 hover:text-blue-400"
               >
                 Appointments

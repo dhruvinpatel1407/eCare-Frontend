@@ -94,9 +94,11 @@ export const uploadReport = (formData) => {
       const result = await apiUploadReport(formData);
       showMessage("success", "Report uploaded successfully!");
       dispatch({ type: UPLOAD_REPORT_SUCCESS, payload: result });
+      return result;
     } catch (error) {
       showMessage("error", "Failed to upload report");
       dispatch({ type: UPLOAD_REPORT_FAILURE, payload: error.message });
+      throw error;
     }
   };
 };

@@ -59,8 +59,10 @@ const fetchAppointments = () => async (dispatch) => {
             const data = await response.json();
             dispatch(successAppointment(data));
             showMessage('success','Appointments cancelled successfully!');
+            return Promise.resolve(data);
         } catch (error) {
             dispatch(failureAppointment(error.message));
+            return Promise.reject(error); 
         }
     };
 };
