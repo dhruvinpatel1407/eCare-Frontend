@@ -24,12 +24,12 @@ export const fetchDoctors = () => async (dispatch) => {
             dispatch(doctorSuccess(data));
         } else {
             dispatch(doctorFailure(data.error || 'Failed to fetch doctors'));
-            // showMessage('error', data.error || 'Failed to fetch doctors');
+            
         }
     } catch (error) {
         console.error('Error fetching doctors:', error);
         dispatch(doctorFailure(error.message));
-        // showMessage('error',error.message || 'Failed to fetch doctors.');
+       
     }
 };
 

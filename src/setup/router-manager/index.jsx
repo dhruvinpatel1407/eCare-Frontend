@@ -16,8 +16,6 @@ import Labreport from "../../pages/labreport";
 import FrequentQuestions from "../../pages/frequentquestions";
 
 
-
-
 const ScrollToTop = () => {
   const location = useLocation();
 
@@ -30,7 +28,7 @@ const ScrollToTop = () => {
 
 const Layout = ({ children }) => {
   const location = useLocation();
-  // console.log(location);
+  
   const hideHeaderFooter = ["/login", "/signup", "/"].includes(location.pathname);
 
   return (

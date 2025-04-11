@@ -7,8 +7,6 @@ export const DEMOGRAPHIC_DETAILS_ERROR = "DEMOGRAPHIC_DETAILS_ERROR";
 export const FETCH_DEMOGRAPHIC_DETAILS = "FETCH_DEMOGRAPHIC_DETAILS";
 
 
-
-
 export const fetchDemographicDetails = (userId) => {
   const token = localStorage.getItem("token");
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -47,8 +45,6 @@ export const addDemographicDetails = (data) => {
       const formData = new FormData();
       const address = data.address;
       formData.append("firstName", data.userName);
-      // formData.append("middleName", data.middleName);
-      // formData.append("lastName", data.lastName);
       formData.append("dateOfBirth", data.dateOfBirth);
       formData.append("gender", data.gender);
       formData.append("bloodGroup", data.bloodGroup);
@@ -70,10 +66,9 @@ formData.append("address[zipCode]", address.zipCode);
       const response = await fetch(`${backendUrl}/demographics`, {
         method: "POST",
         headers: {
-          // "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: formData,          //JSON.stringify(data),
+        body: formData,          
       });
 
       if (!response.ok) {
@@ -102,8 +97,6 @@ export const updateDemographicDetails = (id, data) => {
       const address = data.address;
 
       formData.append("firstName", data.userName);
-      // formData.append("middleName", data.middleName);
-      // formData.append("lastName", data.lastName);
       formData.append("dateOfBirth", data.dateOfBirth);
       formData.append("gender", data.gender);
       formData.append("bloodGroup", data.bloodGroup);
@@ -125,10 +118,9 @@ formData.append("address[zipCode]", address.zipCode);
       const response = await fetch(`${backendUrl}/demographics/${id}`, {
         method: "PUT",
         headers: {
-          // "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: formData                      // JSON.stringify(data),
+        body: formData                      
       });
 
       if (!response.ok) {

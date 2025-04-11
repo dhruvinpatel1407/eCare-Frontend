@@ -32,16 +32,6 @@ const convertDateFormat = (dateString) => {
 
   return `${year}-${month}-${day}`;
 };
-// const bufferToImage = (buffer, mimeType = "image/jpeg") => {
-//   if (!buffer || buffer.length === 0) return "";
-
-//   // Ensure it's converted to Uint8Array
-//   const uint8Array = new Uint8Array(buffer);
-//   console.log(uint8Array);
-//   const blob = new Blob([uint8Array], { type: mimeType });
-//   console.log("blob",blob,URL.createObjectURL(blob) );
-//   return URL.createObjectURL(blob);
-// };;
 
 // Add this helper function to convert dd/mm/yyyy back to ISO format
 const convertDateToIso = (dateString) => {
@@ -71,12 +61,11 @@ const DemographicForm = ({
   );
 
   const demographicId = data?._id;
-  // console.log(demographicId);
+  
   // Initialize form data with default values
   const [preview, setPreview] = useState(null);
   const [formData, setFormData] = useState({
     userName: "",
-    // lastName: "",
     dateOfBirth: "",
     gender: "",
     bloodGroup: "",
@@ -151,7 +140,7 @@ const DemographicForm = ({
     }
   }, [demographicDetails]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     const formDataWithIsoDate = {
       ...formData,
@@ -186,7 +175,7 @@ const DemographicForm = ({
     if (isUpdateForm) {
       updateDemographicDetails(demographicId, formDataWithIsoDate);
     } else {
-      addDemographicDetails(formData);
+      await addDemographicDetails(formData);
       fetchDemographicDetails();
     }
   };
@@ -234,7 +223,7 @@ const DemographicForm = ({
       </div>
     );
   }
-  // console.log("formData", formData);
+  
 
   return (
     <div className="w-full bg-[#FFF2F2]">
@@ -297,16 +286,19 @@ const DemographicForm = ({
               onChange={(e) => handleChange("dateOfBirth", e.target.value)}
               max={convertDateFormat(new Date())}
               disabled={isLoading}
+              required
             />
 
             {/* Gender Select */}
             <div>
               <label className="block text-sm font-medium text-[#2D336B]">
                 Gender
+                <span className="text-red-500 ml-1">*</span>
               </label>
               <select
                 name="gender"
                 value={formData.gender}
+                required
                 onChange={(e) => handleChange("gender", e.target.value)}
                 className="mt-1 block w-full bg-[#FFF2F2] rounded-md border-[#A9B5DF] shadow-sm p-2 text-[#2D336B]"
               >
@@ -322,9 +314,11 @@ const DemographicForm = ({
             <div>
               <label className="block text-sm font-medium text-[#2D336B]">
                 Blood Group
+                <span className="text-red-500 ml-1">*</span>
               </label>
               <select
                 name="bloodGroup"
+                required
                 value={formData.bloodGroup}
                 onChange={(e) => handleChange("bloodGroup", e.target.value)}
                 className="mt-1 block w-full rounded-md border-[#A9B5DF] shadow-sm p-2 text-[#2D336B] bg-[#FFF2F2]"
@@ -346,6 +340,7 @@ const DemographicForm = ({
               type="number"
               name="height"
               value={formData.height}
+              required
               onChange={(e) => handleChange("height", e.target.value)}
             />
 
@@ -354,6 +349,7 @@ const DemographicForm = ({
               type="number"
               name="weight"
               value={formData.weight}
+              required
               onChange={(e) => handleChange("weight", e.target.value)}
             />
 
@@ -361,10 +357,12 @@ const DemographicForm = ({
             <div>
               <label className="block text-sm font-medium text-[#2D336B]">
                 Marital Status
+                <span className="text-red-500 ml-1">*</span>
               </label>
               <select
                 name="maritalStatus"
                 value={formData.maritalStatus}
+                required
                 onChange={(e) => handleChange("maritalStatus", e.target.value)}
                 className="mt-1 block w-full rounded-md border-[#A9B5DF] shadow-sm p-2 text-[#2D336B] bg-[#FFF2F2]"
               >
@@ -380,6 +378,7 @@ const DemographicForm = ({
               label="Occupation"
               type="text"
               name="occupation"
+              required
               value={formData.occupation}
               onChange={(e) => handleChange("occupation", e.target.value)}
             />
@@ -388,6 +387,7 @@ const DemographicForm = ({
               label="Street Address"
               name="address.street"
               value={formData.address.street}
+              required
               onChange={(e) => handleChange("address.street", e.target.value)}
             />
 
@@ -395,6 +395,7 @@ const DemographicForm = ({
               label="City"
               name="address.city"
               value={formData.address.city}
+              required
               onChange={(e) => handleChange("address.city", e.target.value)}
             />
 
@@ -402,6 +403,7 @@ const DemographicForm = ({
               label="State"
               name="address.state"
               value={formData.address.state}
+              required
               onChange={(e) => handleChange("address.state", e.target.value)}
             />
 
@@ -409,6 +411,7 @@ const DemographicForm = ({
               label="Zip Code"
               name="address.zipCode"
               value={formData.address.zipCode}
+              required
               onChange={(e) => handleChange("address.zipCode", e.target.value)}
             />
           </div>

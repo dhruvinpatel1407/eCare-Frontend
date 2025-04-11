@@ -22,7 +22,7 @@ const AppointmentCard = ({ data, onReschedule, onCancel, isLoading }) => {
       {/* Patient Name & Status */}
       <div className="flex justify-between items-start mb-4">
         <div>
-          {/* <h3 className="text-xl font-semibold text-gray-800">{data.patientName}</h3> */}
+        
           <p className="text-[#2D336B] text-base font-medium">Patient</p>
         </div>
         <span className="bg-[#A9B5DF] text-[#2D336B] text-xs font-medium px-3 py-1 rounded-full">

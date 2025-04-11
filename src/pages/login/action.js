@@ -38,9 +38,9 @@ const loginaction = (formData, navigate) => async (dispatch) => {
 
       dispatch(loginSuccess(data));
       showMessage("success" ,"Logged in Successfully!" );
-      // setTimeout(() => {
+      
         navigate("/dashboard");
-      // }, 2000);
+      
     })
     .catch((error) => {
       const errorMessage = error.message || "Signup failed. Please try again.";

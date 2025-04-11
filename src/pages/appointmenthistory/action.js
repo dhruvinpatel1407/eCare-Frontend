@@ -26,12 +26,12 @@ const fetchAppointments = () => async (dispatch) => {
         })
         .then(data => {
             dispatch(appointmentSuccess(data));
-            // showMessage('success','Appointments fetched successfully!');
+            
         })
         .catch(error => {
             console.error('Error fetching appointments:', error);
             dispatch(appointmentFailure(error.message || 'Failed to fetch appointments.'));
-            // showMessage('error',error.message || 'Failed to fetch appointments.');
+            
         });
 };
 

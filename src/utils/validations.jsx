@@ -39,10 +39,9 @@ export const validateMobileNumber = (mobileNumber) => {
 };
 
 export const validateDOB = (dob) => {
-  // const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  
   if (!dob) return "Date of Birth is required";
-  // if (!dateRegex.test(dob)) return "Invalid date format (YYYY-MM-DD)";
-
+  
   const currentDate = new Date();
   const selectedDate = new Date(dob);
 
