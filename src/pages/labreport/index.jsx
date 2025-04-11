@@ -17,35 +17,33 @@ const LabReport = ({
     getReports();
   }, [getReports]);
 
-  const handleUpload = async() => {
-    
+  const handleUpload = async () => {
     // File type validation
-  const allowedTypes = ["application/pdf"];
-  if (!allowedTypes.includes(selectedFile.type)) {
-    showMessage("error","Only PDF files are allowed");
-    return;
-  }
+    const allowedTypes = ["application/pdf"];
+    if (!allowedTypes.includes(selectedFile.type)) {
+      showMessage("error", "Only PDF files are allowed");
+      return;
+    }
 
-// File size validation (5MB = 5 * 1024 * 1024 bytes)
-const maxSize = 5 * 1024 * 1024;
-if (selectedFile.size > maxSize) {
-  showMessage("error", "File size should not exceed 5MB");
-  return;
-}
+    // File size validation (5MB = 5 * 1024 * 1024 bytes)
+    const maxSize = 5 * 1024 * 1024;
+    if (selectedFile.size > maxSize) {
+      showMessage("error", "File size should not exceed 5MB");
+      return;
+    }
 
     if (selectedFile) {
       const formData = new FormData();
       formData.append("pdf", selectedFile);
 
       try {
-        await uploadReport(formData); 
+        await uploadReport(formData);
         setShowUploadForm(false);
-        await getReports();           
+        await getReports();
         setSelectedFile(null);
       } catch (error) {
         console.error("Upload failed:", error);
       }
-      
     }
   };
 
@@ -64,49 +62,53 @@ if (selectedFile.size > maxSize) {
   }
 
   return (
-    <div className="container mx-auto p-4 min-h-screen bg-gray-50">
+    <div className="bg-[#FFF2F2]">
+    <div
+      className="container mx-auto p-4 min-h-screen"
+      style={{ backgroundColor: "#FFF2F2" }}
+    >
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+        <h1 className="text-3xl font-bold text-[#2D336B] mb-6 text-center">
           Lab Reports
         </h1>
 
         {/* Upload Form */}
         {showUploadForm && (
-          <div className="fixed inset-0 z-10 flex items-center justify-center bg-white bg-opacity-40 ">
+          <div className="fixed inset-0 z-10 flex items-center justify-center bg-[#FFF2F2]/70">
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
-               await handleUpload(selectedFile);
+                await handleUpload(selectedFile);
                 setShowUploadForm(false);
               }}
               className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md mx-auto"
             >
-              <h2 className="text-lg font-bold text-gray-800 mb-4 text-center">
+              <h2 className="text-xl font-semibold text-[#2D336B] mb-4 text-center">
                 Upload Lab Report
               </h2>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-medium mb-2">
+                <label className="block text-[#2D336B] text-sm font-medium mb-2">
                   Select File
                 </label>
                 <input
                   type="file"
                   onChange={(e) => setSelectedFile(e.target.files[0])}
                   accept=".pdf,.doc,.docx"
-                  className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-800 hover:file:bg-blue-200"
+                  className="block w-full text-sm text-[#2D336B] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-medium file:bg-[#A9B5DF] file:text-[#2D336B] hover:file:bg-[#7886C7]/80"
                 />
               </div>
               <div className="flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setShowUploadForm(false)}
-                  className="px-4 py-2 text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md"
+                  className="px-4 py-2 text-sm bg-[#A9B5DF] text-[#2D336B] hover:bg-[#7886C7] rounded-md"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition disabled:opacity-50"
+                  className="bg-[#7886C7] hover:bg-[#2D336B] text-white font-medium py-2 px-4 rounded-md transition disabled:opacity-50"
                 >
                   {loading ? "Uploading..." : "Upload"}
                 </button>
@@ -117,34 +119,39 @@ if (selectedFile.size > maxSize) {
 
         {/* Reports Table */}
         <div className="bg-white rounded-xl shadow-md overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-100">
+          <table
+            className="min-w-full divide-y"
+            style={{ borderColor: "#A9B5DF" }}
+          >
+            <thead style={{ backgroundColor: "#A9B5DF" }}>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#2D336B] uppercase tracking-wider">
                   Report Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#2D336B] uppercase tracking-wider">
                   Uploaded Date
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-[#2D336B] uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody
+              className="bg-white divide-y"
+              style={{ borderColor: "#A9B5DF" }}
+            >
               {!loading && reports.length === 0 ? (
                 <tr>
                   <td colSpan="3" className="py-12 text-center">
                     <div className="flex flex-col items-center space-y-4">
-                      {/* Inline SVG for Empty State */}
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 200 200"
-                        className="w-64 h-64 text-blue-400"
+                        className="w-64 h-64"
                         fill="none"
                       >
-                        <rect width="200" height="200" rx="20" fill="#EFF6FF" />
-                        <g stroke="#3B82F6" strokeWidth="2">
+                        <rect width="200" height="200" rx="20" fill="#A9B5DF" />
+                        <g stroke="#2D336B" strokeWidth="2">
                           <rect
                             x="50"
                             y="40"
@@ -159,13 +166,10 @@ if (selectedFile.size > maxSize) {
                           <line x1="60" y1="105" x2="130" y2="105" />
                           <line x1="60" y1="120" x2="100" y2="120" />
                         </g>
-                        
                       </svg>
-
-                      {/* Message */}
-                      <p className="text-gray-500 text-lg">
+                      <p className="text-[#2D336B] text-lg">
                         No reports uploaded yet. Click the{" "}
-                        <strong className="text-blue-600">+ button</strong> to
+                        <strong className="text-[#7886C7]">+</strong> to
                         add one!
                       </p>
                     </div>
@@ -173,17 +177,17 @@ if (selectedFile.size > maxSize) {
                 </tr>
               ) : (
                 reports.map((report) => (
-                  <tr key={report._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                  <tr key={report._id} className="hover:bg-[#A9B5DF]/20">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#2D336B]">
                       {report.filename}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#2D336B]/80">
                       {new Date(report.createdAt).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
                         onClick={(e) => handleDownload(e, report.filename)}
-                        className="text-blue-600 hover:underline text-sm"
+                        className="text-[#7886C7] hover:underline text-sm font-medium"
                       >
                         Download
                       </button>
@@ -198,13 +202,13 @@ if (selectedFile.size > maxSize) {
         {/* Floating Upload Button */}
         <button
           onClick={() => setShowUploadForm(true)}
-          className="fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105"
+          className="fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-[#2D336B] hover:bg-[#7886C7] text-white p-4 rounded-full shadow-lg transition transform hover:scale-105"
           aria-label="Upload Report"
         >
           <FaPlus className="text-lg" />
         </button>
       </div>
-    </div>
+    </div></div>
   );
 };
 

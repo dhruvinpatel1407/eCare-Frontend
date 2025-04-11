@@ -110,13 +110,13 @@ const RescheduleAppointment = () => {
 
   return (
     <div className="pt-20 container mx-auto p-4 max-w-4xl">
-      <div className="bg-white rounded-2xl shadow-xl p-8 space-y-8 border border-gray-100">
+      <div className="bg-white rounded-2xl shadow-xl p-8 space-y-8 border border-[#A9B5DF]">
         {/* Existing Appointment Info */}
         <div className="space-y-3">
-          <h2 className="text-3xl font-bold text-blue-800">
+          <h2 className="text-3xl font-bold text-[#2D336B]">
             Your Current Appointment
           </h2>
-          <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-lg text-gray-700">
+          <div className="bg-[#FFF2F2] border-l-4 border-[#A9B5DF] p-4 rounded-lg text-[#2D336B] text-base">
             <p>
               <span className="font-medium">Date:</span>{" "}
               {existingAppointment?.bookedTime.split(" ")[0]}
@@ -129,20 +129,20 @@ const RescheduleAppointment = () => {
 
         {/* Reschedule Section */}
         <div className="space-y-6">
-          <h2 className="text-2xl font-semibold text-blue-700 border-b pb-2 border-gray-200">
+          <h2 className="text-2xl font-semibold text-[#2D336B] border-b pb-2 border-[#A9B5DF]">
             Reschedule Your Appointment
           </h2>
 
           {/* Date Picker */}
           <div>
-            <label className="block mb-2 text-gray-700 font-medium">
+            <label className="block mb-2 text-[#2D336B] font-medium text-base">
               Select a New Date
             </label>
             <DatePicker
               selected={selectedDate}
               onChange={(date) => setSelectedDate(date)}
               minDate={new Date()}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full p-3 border border-[#A9B5DF] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7886C7]"
               placeholderText="Select a date"
               dateFormat="dd/MM/yyyy"
             />
@@ -150,7 +150,7 @@ const RescheduleAppointment = () => {
 
           {/* Available Time Slots */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+            <h3 className="text-lg font-semibold text-[#2D336B] mb-2">
               Available Time Slots
             </h3>
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
@@ -158,12 +158,11 @@ const RescheduleAppointment = () => {
                 <button
                   key={index}
                   onClick={() => handleTimeSelect(timeSlot)}
-                  className={`p-3 rounded-xl text-sm font-medium transition-all border
-                ${
-                  selectedTime === timeSlot
-                    ? "bg-blue-600 text-white border-blue-600 shadow-md"
-                    : "bg-white text-gray-800 border-gray-300 hover:bg-blue-50 hover:border-blue-300"
-                }`}
+                  className={`p-3 rounded-xl text-sm font-medium transition-all border ${
+                    selectedTime === timeSlot
+                      ? "bg-[#2D336B] text-white border-[#2D336B] shadow-md"
+                      : "bg-white text-[#2D336B] border-[#A9B5DF] hover:bg-[#A9B5DF]/20 hover:border-[#7886C7]"
+                  }`}
                 >
                   {timeSlot}
                 </button>
@@ -175,7 +174,7 @@ const RescheduleAppointment = () => {
           <button
             onClick={handleRescheduleAppointment}
             disabled={!selectedDate || !selectedTime}
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-xl font-semibold shadow-lg hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-[#2D336B] text-white py-3 px-4 rounded-xl font-semibold shadow-lg hover:bg-[#7886C7] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Confirm Reschedule
           </button>

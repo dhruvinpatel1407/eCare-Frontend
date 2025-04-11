@@ -237,8 +237,9 @@ const DemographicForm = ({
   // console.log("formData", formData);
 
   return (
-    <div className="pt-20 max-w-3xl mx-auto py-12 px-6 bg-white shadow-md rounded-xl">
-      <h2 className="text-2xl font-bold text-center mb-6 text-blue-700">
+    <div className="w-full bg-[#FFF2F2]">
+    <div className="pt-20 max-w-3xl mx-auto py-12 px-6 bg-[#FFF2F2] shadow-md rounded-xl">
+      <h2 className="text-2xl font-semibold text-center mb-6 text-[#2D336B] font-sans">
         Patient Information
       </h2>
 
@@ -250,16 +251,16 @@ const DemographicForm = ({
               <img
                 src={preview}
                 alt="Profile Preview"
-                className="w-32 h-32 rounded-full object-cover border-4 border-blue-300 shadow-sm"
+                className="w-32 h-32 rounded-full object-cover border-4 border-[#A9B5DF] shadow-sm"
               />
             ) : (
-              <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
+              <div className="w-32 h-32 rounded-full bg-[#A9B5DF] flex items-center justify-center text-[#2D336B] text-sm">
                 No Image
               </div>
             )}
             <label
               onClick={handleToggleInput}
-              className="mt-3 block text-sm font-medium text-gray-700"
+              className="mt-3 block text-sm font-medium text-[#2D336B] cursor-pointer"
             >
               Change Image
             </label>
@@ -300,33 +301,33 @@ const DemographicForm = ({
 
             {/* Gender Select */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-[#2D336B]">
                 Gender
               </label>
               <select
                 name="gender"
                 value={formData.gender}
                 onChange={(e) => handleChange("gender", e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
+                className="mt-1 block w-full bg-[#FFF2F2] rounded-md border-[#A9B5DF] shadow-sm p-2 text-[#2D336B]"
               >
                 <option value="">Select gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
-                <option value="Other">Other</option>
+                <option value="Other" >Other</option>
                 <option value="Prefer not to say">Prefer not to say</option>
               </select>
             </div>
 
             {/* Blood Group Select */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-[#2D336B]">
                 Blood Group
               </label>
               <select
                 name="bloodGroup"
                 value={formData.bloodGroup}
                 onChange={(e) => handleChange("bloodGroup", e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
+                className="mt-1 block w-full rounded-md border-[#A9B5DF] shadow-sm p-2 text-[#2D336B] bg-[#FFF2F2]"
               >
                 <option value="">Select blood group</option>
                 <option value="A+">A+</option>
@@ -356,16 +357,16 @@ const DemographicForm = ({
               onChange={(e) => handleChange("weight", e.target.value)}
             />
 
-            {/* Marital Status Select */}
+            {/* Marital Status */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-[#2D336B]">
                 Marital Status
               </label>
               <select
                 name="maritalStatus"
                 value={formData.maritalStatus}
                 onChange={(e) => handleChange("maritalStatus", e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
+                className="mt-1 block w-full rounded-md border-[#A9B5DF] shadow-sm p-2 text-[#2D336B] bg-[#FFF2F2]"
               >
                 <option value="">Select marital status</option>
                 <option value="Single">Single</option>
@@ -415,16 +416,16 @@ const DemographicForm = ({
           {/* Submit Button */}
           <button
             type="submit"
-            className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+            className="mt-6 w-full bg-[#2D336B] text-white py-2 rounded-lg hover:bg-[#7886C7] transition-all"
             disabled={isLoading}
           >
             {isUpdateForm ? "Update" : "Create"}
           </button>
 
-          {error && <p className="mt-3 text-center text-red-500">{error}</p>}
+          {error && <p className="mt-3 text-center text-red-600">{error}</p>}
         </fieldset>
       </form>
-    </div>
+    </div></div>
   );
 };
 

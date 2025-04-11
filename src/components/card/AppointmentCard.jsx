@@ -12,49 +12,67 @@ const AppointmentCard = ({ data, onReschedule, onCancel, isLoading }) => {
   const isDisabled = data.status?.toLowerCase() === "cancelled";
   if (isLoading) {
     return (
-        <div className="flex justify-center items-center h-screen">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-        </div>
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
     );
-}
+  }
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 mb-4">
+    <div className="bg-white rounded-2xl shadow-md p-6 mb-4 border border-[#E5E7EB] hover:shadow-lg transition-shadow hover:-translate-y-1 transform transition-transform">
       {/* Patient Name & Status */}
       <div className="flex justify-between items-start mb-4">
         <div>
           {/* <h3 className="text-xl font-semibold text-gray-800">{data.patientName}</h3> */}
-          <p className="text-gray-600">Patient</p>
+          <p className="text-[#2D336B] text-base font-medium">Patient</p>
         </div>
-        <span className="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded">
+        <span className="bg-[#A9B5DF] text-[#2D336B] text-xs font-medium px-3 py-1 rounded-full">
           {data.status}
         </span>
       </div>
 
       {/* Appointment Details */}
-      <div className="space-y-2">
-        <p className="text-gray-600">Doctor: {data.physician?.name}</p>
-        <p className="text-gray-600">
-          Clinic: {data.physician?.clinics?.[0]?.clinicName}
+      <div className="space-y-2 text-base text-[#7886C7]">
+        <p>
+          Doctor: <span className="text-[#2D336B]">{data.physician?.name}</span>
         </p>
-        <p className="text-gray-600">Date: {date}</p>
-        <p className="text-gray-600">Time: {time}</p>
-        <p className="text-gray-600">
-          Speciality: {data.physician?.speciality}
+        <p>
+          Clinic:{" "}
+          <span className="text-[#2D336B]">
+            {data.physician?.clinics?.[0]?.clinicName}
+          </span>
+        </p>
+        <p>
+          Date: <span className="text-[#2D336B]">{date}</span>
+        </p>
+        <p>
+          Time: <span className="text-[#2D336B]">{time}</span>
+        </p>
+        <p>
+          Speciality:{" "}
+          <span className="text-[#2D336B]">{data.physician?.speciality}</span>
         </p>
       </div>
 
       {/* Buttons Section */}
-      <div className="flex justify-between mt-4">
+      <div className="flex justify-between mt-6">
         <button
           onClick={() => onReschedule(data)}
-          className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
+          className={`px-4 py-2 rounded-md transition ${
+            isDisabled
+              ? 'bg-[#7886C7] text-[#4B5563]'
+              : 'bg-[#2D336B] text-white hover:bg-[#7886C7]'
+          }`} 
           disabled={isDisabled}
         >
           Reschedule
         </button>
         <button
           onClick={() => onCancel(data)}
-          className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+          className={`px-4 py-2 rounded-md transition ${
+            isDisabled
+              ? 'bg-[#7886C7] text-[#4B5563]'
+              : 'bg-[#2D336B] text-white hover:bg-[#7886C7]'
+          }`}
           disabled={isDisabled}
         >
           Cancel

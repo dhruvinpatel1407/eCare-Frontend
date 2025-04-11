@@ -23,13 +23,11 @@ const AppointmentHistory = () => {
 
   const handleCancel = async (appointment) => {
     try {
-      await dispatch(cancelAppointment(appointment._id)); 
-      dispatch(fetchAppointments());                      
+      await dispatch(cancelAppointment(appointment._id));
+      dispatch(fetchAppointments());
     } catch (error) {
       console.error("Failed to cancel appointment:", error.message);
-      
     }
-     
   };
 
   if (isLoading) {
@@ -41,8 +39,9 @@ const AppointmentHistory = () => {
   }
 
   return (
-    <div className="pt-20 container mx-auto p-4">
-      <h1 className="text-3xl font-bold mt-12 mb-8 text-center text-blue-800">
+    <div className="w-full bg-[#FFF2F2]">
+    <div className="pt-20 container mx-auto p-4 bg-[#FFF2F2] min-h-screen">
+      <h1 className="text-3xl font-bold mb-8 text-center text-[#2D336B]">
         Your Appointments
       </h1>
 
@@ -74,15 +73,15 @@ const AppointmentHistory = () => {
             />
           </svg>
 
-          <h2 className="text-2xl font-semibold text-gray-700">
+          <h2 className="text-xl font-semibold text-[#2D336B]">
             No Appointments Found
           </h2>
-          <p className="text-gray-500">
+          <p className="text-base text-[#7886C7]">
             It looks like you haven’t booked any appointments yet.
           </p>
           <button
             onClick={() => navigate("/dashboard")}
-            className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all"
+            className="mt-4 px-6 py-3 bg-[#2D336B] text-white rounded-lg hover:bg-[#1f254d] transition-all"
           >
             Book an Appointment
           </button>
@@ -100,7 +99,7 @@ const AppointmentHistory = () => {
           ))}
         </div>
       )}
-    </div>
+    </div></div>
   );
 };
 

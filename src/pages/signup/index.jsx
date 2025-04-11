@@ -1,56 +1,56 @@
 // Client/src/pages/signup/index.jsx
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import InputField from '../../components/inputField';
-import { validateForm } from '../../utils/validations';
-import { showMessage } from '../../utils/ToastMessage/ShowMessage';
-import { signup } from './action';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import InputField from "../../components/inputField";
+import { validateForm } from "../../utils/validations";
+import { showMessage } from "../../utils/ToastMessage/ShowMessage";
+import { signup } from "./action";
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
-    userName: '',
-    email: '',
-    passWord: '',
-    mobileNumber: ''
+    userName: "",
+    email: "",
+    passWord: "",
+    mobileNumber: "",
   });
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector(state => state.signup);
+  const { loading, error } = useSelector((state) => state.signup);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const validationErrors = validateForm(formData, 'signup');
-    
+    const validationErrors = validateForm(formData, "signup");
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      showMessage("error","Please fill in all required fields");
+      showMessage("error", "Please fill in all required fields");
       return;
     }
 
-    dispatch(signup(formData,navigate));
+    dispatch(signup(formData, navigate));
     setTimeout(() => {
       setFormData({
-        userName: '',
-        email: '',
-        passWord: '',
-        mobileNumber: ''
+        userName: "",
+        email: "",
+        passWord: "",
+        mobileNumber: "",
       });
     }, 2000);
   };
@@ -64,11 +64,13 @@ const Signup = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-teal-100 via-white to-blue-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#A9B5DF] via-white to-[#A9B5DF]">
       <div className="max-w-md w-full space-y-6 p-8 bg-white rounded-2xl shadow-xl border border-gray-200">
         <div>
-          <h2 className="text-center text-4xl font-bold text-blue-800">Create Account</h2>
-          <p className="text-center text-gray-600 text-sm mt-1">
+          <h2 className="text-center text-4xl font-bold text-[#2D336B]">
+            Create Account
+          </h2>
+          <p className="text-center text-gray-600 text-base mt-1">
             Sign up to book your doctor appointments easily
           </p>
         </div>
@@ -117,18 +119,18 @@ const Signup = () => {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200"
+            className="w-full py-2 px-4 bg-[#7886C7] hover:bg-[#2D336B] text-white font-semibold rounded-lg transition duration-200"
             disabled={loading}
           >
-            {loading ? 'Signing Up...' : 'Sign Up'}
+            {loading ? "Signing Up..." : "Sign Up"}
           </button>
         </form>
 
-        <div className="text-center text-sm text-gray-600">
-          Already registered?{' '}
+        <div className="text-center text-base text-gray-600">
+          Already registered?{" "}
           <Link
             to="/login"
-            className="text-blue-600 hover:text-blue-800 font-medium transition duration-150"
+            className="text-[#7886C7] hover:text-[#2D336B] font-medium transition duration-150"
           >
             Log in here
           </Link>

@@ -75,7 +75,7 @@ const firebaseLoginAction = (formData, navigate) => async (dispatch) => {
     }
 
     dispatch(loginSuccess(formData));
-    showMessage("success", "Authentication successful!");
+    showMessage("success", "Logged in successfully!");
     setTimeout(() => {
       navigate("/dashboard");
     }, 2000);
