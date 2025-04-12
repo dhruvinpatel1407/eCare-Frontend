@@ -42,7 +42,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Left side - Brand and main menu */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-1">
+            <Link to="/dashboard" className="flex items-center space-x-1">
               <span
                 className="text-2xl font-bold text-[#A9B5DF]"
                 data-testid="logo-image"
